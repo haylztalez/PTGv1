@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<project>                                  
+  <executable name="dist/default/production/PTGv1.X.production.elf">                 
+    <memory name="program">                 
+      <units>bytes</units>                 
+      <length>1049744</length>                 
+      <used>5624</used>                     
+      <free>1044120</free>                     
+    </memory>                              
+    <memory name="data">              
+      <units>bytes</units>                 
+      <length>262144</length>                 
+      <used>100</used>                     
+      <free>262044</free>                     
+    </memory>                              
+  </executable>                            
+</project>                                 
