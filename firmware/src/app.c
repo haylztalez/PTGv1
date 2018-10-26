@@ -54,6 +54,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "app.h"
+#include <stdio.h>
 
 // *****************************************************************************
 // *****************************************************************************
@@ -85,7 +86,10 @@ static enum
     USART_BM_DONE,
 } usartBMState;
 
-
+void _mon_putc(char print_byte)
+{
+    DRV_USART_WriteByte(appData.handleUSART0, print_byte);
+}
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -111,43 +115,43 @@ static enum
     generated application modules.  Typically, the pipe is connected to the application's
     USART receive function, but could be any other Harmony module which supports the pipe interface. 
 */
-static void USART_Task (void)
-{
-    switch (usartBMState)
-    {
-        default:
-        case USART_BM_INIT:
-        {
-            appData.tx_count = 0;
-            usartBMState = USART_BM_WORKING;
-            break;
-        }
-
-        case USART_BM_WORKING:
-        {
-            if (appData.tx_count < sizeof(app_tx_buf)) 
-            {
-                if(!DRV_USART_TransmitBufferIsFull(appData.handleUSART0))
-                {
-                    DRV_USART_WriteByte(appData.handleUSART0, app_tx_buf[appData.tx_count]);
-                    appData.tx_count++;
-                }
-            }
-
-            /* Have we finished? */
-            if (appData.tx_count == sizeof(app_tx_buf))
-            {
-                usartBMState = USART_BM_DONE;
-            }
-            break;
-        }
-
-        case USART_BM_DONE:
-        {
-            break;
-        }
-    }
-}
+//static void USART_Task (void)
+//{
+//    switch (usartBMState)
+//    {
+//        default:
+//        case USART_BM_INIT:
+//        {
+//            appData.tx_count = 0;
+//            usartBMState = USART_BM_WORKING;
+//            break;
+//        }
+//
+//        case USART_BM_WORKING:
+//        {
+//            if (appData.tx_count < sizeof(app_tx_buf)) 
+//            {
+//                if(!DRV_USART_TransmitBufferIsFull(appData.handleUSART0))
+//                {
+//                    DRV_USART_WriteByte(appData.handleUSART0, app_tx_buf[appData.tx_count]);
+//                    appData.tx_count++;
+//                }
+//            }
+//
+//            /* Have we finished? */
+//            if (appData.tx_count == sizeof(app_tx_buf))
+//            {
+//                usartBMState = USART_BM_DONE;
+//            }
+//            break;
+//        }
+//
+//        case USART_BM_DONE:
+//        {
+//            break;
+//        }
+//    }
+//}
 
 /* TODO:  Add any necessary local functions.
 */
@@ -217,7 +221,9 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
-			USART_Task();
+            
+			//USART_Task();
+            printf("Hi");
         
             break;
         }
