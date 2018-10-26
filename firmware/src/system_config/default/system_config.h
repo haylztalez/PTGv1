@@ -81,14 +81,14 @@ extern "C" {
 // *****************************************************************************
 /* Clock System Service Configuration Options
 */
-#define SYS_CLK_FREQ                        12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_2            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_3            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_4            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_5            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_6            3072000ul
-#define SYS_CLK_BUS_PERIPHERAL_7            12288000ul
+#define SYS_CLK_FREQ                        8000000ul
+#define SYS_CLK_BUS_PERIPHERAL_1            8000000ul
+#define SYS_CLK_BUS_PERIPHERAL_2            8000000ul
+#define SYS_CLK_BUS_PERIPHERAL_3            8000000ul
+#define SYS_CLK_BUS_PERIPHERAL_4            8000000ul
+#define SYS_CLK_BUS_PERIPHERAL_5            8000000ul
+#define SYS_CLK_BUS_PERIPHERAL_6            2000000ul
+#define SYS_CLK_BUS_PERIPHERAL_7            8000000ul
 #define SYS_CLK_BUS_REFERENCE_1             3072000ul
 #define SYS_CLK_BUS_REFERENCE_4             48000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         12288000ul
@@ -103,7 +103,7 @@ extern "C" {
 #define SYS_PORT_A_CNPD         0x0000
 #define SYS_PORT_A_CNEN         0x0000
 
-#define SYS_PORT_B_ANSEL        0x030F
+#define SYS_PORT_B_ANSEL        0x0187
 #define SYS_PORT_B_TRIS         0xFFFF
 #define SYS_PORT_B_LAT          0x0000
 #define SYS_PORT_B_ODC          0x0000
@@ -111,7 +111,7 @@ extern "C" {
 #define SYS_PORT_B_CNPD         0x0000
 #define SYS_PORT_B_CNEN         0x0000
 
-#define SYS_PORT_C_ANSEL        0xFC3F
+#define SYS_PORT_C_ANSEL        0xFC1F
 #define SYS_PORT_C_TRIS         0xFFFF
 #define SYS_PORT_C_LAT          0x0000
 #define SYS_PORT_C_ODC          0x0000
@@ -160,6 +160,15 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+// *****************************************************************************
+/* USART Driver Configuration Options
+*/
+#define DRV_USART_INSTANCES_NUMBER                  1
+#define DRV_USART_CLIENTS_NUMBER                    1
+#define DRV_USART_INTERRUPT_MODE                    true
+#define DRV_USART_BYTE_MODEL_SUPPORT                true
+#define DRV_USART_READ_WRITE_MODEL_SUPPORT          false
+#define DRV_USART_BUFFER_QUEUE_SUPPORT              false
 
 // *****************************************************************************
 // *****************************************************************************
@@ -238,6 +247,7 @@ extern "C" {
 
 
 /*** Application Instance 0 Configuration ***/
+#define APP_DRV_USART                     0
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

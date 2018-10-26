@@ -93,8 +93,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*** DEVCFG2 ***/
 
 #pragma config FPLLIDIV =   DIV_1
-#pragma config FPLLRNG =    RANGE_8_16_MHZ
-#pragma config FPLLICLK =   PLL_POSC
+#pragma config FPLLRNG =    RANGE_5_10_MHZ
+#pragma config FPLLICLK =   PLL_FRC
 #pragma config FPLLMULT =   MUL_32
 #pragma config FPLLODIV =   DIV_32
 #pragma config VBATBOREN =  ON
@@ -128,6 +128,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Driver Initialization Data
 // *****************************************************************************
 // *****************************************************************************
+// <editor-fold defaultstate="collapsed" desc="DRV_USART Initialization Data">
+// </editor-fold>
 
 // *****************************************************************************
 // *****************************************************************************
@@ -176,6 +178,13 @@ void SYS_Initialize ( void* data )
     SYS_PORTS_Initialize();
 
     /* Initialize Drivers */
+    sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_UART1_TX, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1_TX, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_UART1_RX, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1_RX, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_UART1_FAULT, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1_FAULT, INT_SUBPRIORITY_LEVEL0);
 
     /* Initialize System Services */
 

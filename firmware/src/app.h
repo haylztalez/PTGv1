@@ -114,6 +114,8 @@ typedef struct
     APP_STATES state;
 
     /* TODO: Define any additional data used by the application. */
+    DRV_HANDLE handleUSART0;
+	int tx_count;
 
 } APP_DATA;
 
