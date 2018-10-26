@@ -86,8 +86,13 @@ static enum
     USART_BM_DONE,
 } usartBMState;
 
-void _mon_putc(char print_byte)
+void _mon_putc(const char print_byte)
 {
+    while(DRV_USART_TransmitBufferIsFull(appData.handleUSART0)) 
+    {
+        
+    }
+
     DRV_USART_WriteByte(appData.handleUSART0, print_byte);
 }
 // *****************************************************************************
@@ -129,20 +134,21 @@ void _mon_putc(char print_byte)
 //
 //        case USART_BM_WORKING:
 //        {
-//            if (appData.tx_count < sizeof(app_tx_buf)) 
-//            {
-//                if(!DRV_USART_TransmitBufferIsFull(appData.handleUSART0))
-//                {
-//                    DRV_USART_WriteByte(appData.handleUSART0, app_tx_buf[appData.tx_count]);
-//                    appData.tx_count++;
-//                }
-//            }
-//
-//            /* Have we finished? */
-//            if (appData.tx_count == sizeof(app_tx_buf))
-//            {
-//                usartBMState = USART_BM_DONE;
-//            }
+//            
+////            if (appData.tx_count < sizeof(app_tx_buf)) 
+////            {
+////                if(!DRV_USART_TransmitBufferIsFull(appData.handleUSART0))
+////                {
+////                    DRV_USART_WriteByte(appData.handleUSART0, app_tx_buf[appData.tx_count]);
+////                    appData.tx_count++;
+////                }
+////            }
+////
+////            /* Have we finished? */
+////            if (appData.tx_count == sizeof(app_tx_buf))
+////            {
+////                usartBMState = USART_BM_DONE;
+////            }
 //            break;
 //        }
 //
@@ -223,8 +229,8 @@ void APP_Tasks ( void )
         {
             
 			//USART_Task();
-            printf("Hi");
-        
+            printf("Hi\r\n");
+            
             break;
         }
 
