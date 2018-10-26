@@ -160,6 +160,44 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+
+/*** I2S Driver Configuration ***/
+
+
+#define DRV_I2S_INTERRUPT_MODE					true
+#define DRV_I2S_CLIENTS_NUMBER					1
+#define DRV_I2S_INSTANCES_NUMBER				1
+#define DRV_I2S_STOP_IN_IDLE					false
+#define DRV_I2S_PERIPHERAL_ID_IDX0				SPI_ID_1
+#define DRV_I2S_USAGE_MODE_IDX0					DRV_I2S_MODE_MASTER
+#define DRV_I2S_STOP_IN_IDLE_IDX0				false
+#define SPI_BAUD_RATE_CLK_IDX0					SPI_BAUD_RATE_MCLK_CLOCK
+#define DRV_I2S_BAUD_RATE                       48000
+#define DRV_I2S_CLK_MODE_IDX0					DRV_I2S_CLOCK_MODE_IDLE_LOW_EDGE_RISE
+#define SPI_AUDIO_COMM_WIDTH_IDX0				SPI_AUDIO_COMMUNICATION_24DATA_32FIFO_32CHANNEL
+#define SPI_AUDIO_TRANSMIT_MODE_IDX0			SPI_AUDIO_TRANSMIT_STEREO
+#define SPI_INPUT_SAMPLING_PHASE_IDX0			SPI_INPUT_SAMPLING_PHASE_IN_MIDDLE
+#define DRV_I2S_AUDIO_PROTOCOL_MODE_IDX0		DRV_I2S_AUDIO_LFET_JUSTIFIED
+#define DRV_I2S_TX_INT_SRC_IDX0					INT_SOURCE_SPI_1_TRANSMIT
+#define DRV_I2S_RX_INT_SRC_IDX0					INT_SOURCE_SPI_1_RECEIVE
+#define DRV_I2S_ERR_INT_SRC_IDX0				INT_SOURCE_SPI_1_ERROR
+#define DRV_I2S_TX_INT_VECTOR_IDX0				INT_VECTOR_SPI1_TX
+#define DRV_I2S_TX_INT_PRIORITY_IDX0			
+#define DRV_I2S_TX_INT_SUB_PRIORITY_IDX0		
+#define DRV_I2S_TX_ISR_VECTOR_IDX0				
+#define DRV_I2S_RX_INT_VECTOR_IDX0				INT_VECTOR_SPI1_RX
+#define DRV_I2S_RX_INT_PRIORITY_IDX0			
+#define DRV_I2S_RX_INT_SUB_PRIORITY_IDX0		
+#define DRV_I2S_RX_ISR_VECTOR_IDX0				
+#define DRV_I2S_ERR_INT_VECTOR_IDX0				INT_VECTOR_SPI1_FAULT
+#define DRV_I2S_ERR_INT_PRIORITY_IDX0			
+#define DRV_I2S_ERR_INT_SUB_PRIORITY_IDX0		
+#define DRV_I2S_ERR_ISR_VECTOR_IDX0				
+#define QUEUE_SIZE_TX_IDX0                      3
+#define QUEUE_SIZE_RX_IDX0                      2
+#define DRV_I2S_POWER_STATE_IDX0				SYS_MODULE_POWER_RUN_FULL
+#define DRV_I2S_QUEUE_DEPTH_COMBINED     		5
+
 // *****************************************************************************
 /* USART Driver Configuration Options
 */
@@ -184,66 +222,6 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
 /*** Application Defined Pins ***/
-
-/*** Functions for TRIGGER pin ***/
-#define TRIGGER_PORT PORT_CHANNEL_A
-#define TRIGGER_PIN PORTS_BIT_POS_7
-#define TRIGGER_PIN_MASK (0x1 << 7)
-
-/*** Functions for DAC_ZEROL pin ***/
-#define DAC_ZEROL_PORT PORT_CHANNEL_G
-#define DAC_ZEROL_PIN PORTS_BIT_POS_6
-#define DAC_ZEROL_PIN_MASK (0x1 << 6)
-
-/*** Functions for DAC_ZEROH pin ***/
-#define DAC_ZEROH_PORT PORT_CHANNEL_G
-#define DAC_ZEROH_PIN PORTS_BIT_POS_7
-#define DAC_ZEROH_PIN_MASK (0x1 << 7)
-
-/*** Functions for ENC_B pin ***/
-#define ENC_B_PORT PORT_CHANNEL_A
-#define ENC_B_PIN PORTS_BIT_POS_12
-#define ENC_B_PIN_MASK (0x1 << 12)
-
-/*** Functions for ENC_A pin ***/
-#define ENC_A_PORT PORT_CHANNEL_A
-#define ENC_A_PIN PORTS_BIT_POS_11
-#define ENC_A_PIN_MASK (0x1 << 11)
-
-/*** Functions for LED2 pin ***/
-#define LED2_PORT PORT_CHANNEL_E
-#define LED2_PIN PORTS_BIT_POS_14
-#define LED2_PIN_MASK (0x1 << 14)
-
-/*** Functions for LED1 pin ***/
-#define LED1_PORT PORT_CHANNEL_E
-#define LED1_PIN PORTS_BIT_POS_15
-#define LED1_PIN_MASK (0x1 << 15)
-
-/*** Functions for BAR_DAC_CS pin ***/
-#define BAR_DAC_CS_PORT PORT_CHANNEL_A
-#define BAR_DAC_CS_PIN PORTS_BIT_POS_4
-#define BAR_DAC_CS_PIN_MASK (0x1 << 4)
-
-/*** Functions for BUTTON2 pin ***/
-#define BUTTON2_PORT PORT_CHANNEL_F
-#define BUTTON2_PIN PORTS_BIT_POS_1
-#define BUTTON2_PIN_MASK (0x1 << 1)
-
-/*** Functions for BUTTON1 pin ***/
-#define BUTTON1_PORT PORT_CHANNEL_B
-#define BUTTON1_PIN PORTS_BIT_POS_10
-#define BUTTON1_PIN_MASK (0x1 << 10)
-
-/*** Functions for BUTTON4 pin ***/
-#define BUTTON4_PORT PORT_CHANNEL_B
-#define BUTTON4_PIN PORTS_BIT_POS_11
-#define BUTTON4_PIN_MASK (0x1 << 11)
-
-/*** Functions for BUTTON3 pin ***/
-#define BUTTON3_PORT PORT_CHANNEL_B
-#define BUTTON3_PIN PORTS_BIT_POS_12
-#define BUTTON3_PIN_MASK (0x1 << 12)
 
 
 /*** Application Instance 0 Configuration ***/

@@ -78,6 +78,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 APP_DATA appData;
+int i=0;
 static uint8_t app_tx_buf[] = "Hello World\r\n";
 static enum 
 {
@@ -208,6 +209,7 @@ void APP_Tasks ( void )
         case APP_STATE_INIT:
         {
             bool appInitialized = true;
+            
        
             if (appData.handleUSART0 == DRV_HANDLE_INVALID)
             {
@@ -227,9 +229,14 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
-            
+            //printf("%d",i);
 			//USART_Task();
-            printf("Hi\r\n");
+         if(i == 0)
+        {
+            printf("Yo");
+            i++;
+        }
+            //printf("Hi\n");
             
             break;
         }
