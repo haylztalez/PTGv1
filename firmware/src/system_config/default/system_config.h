@@ -57,6 +57,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*  This section Includes other configuration headers necessary to completely
     define this configuration.
 */
+#include "bsp.h"
 
 
 // DOM-IGNORE-BEGIN
@@ -81,27 +82,29 @@ extern "C" {
 // *****************************************************************************
 /* Clock System Service Configuration Options
 */
-#define SYS_CLK_FREQ                        8000000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            8000000ul
-#define SYS_CLK_BUS_PERIPHERAL_2            8000000ul
-#define SYS_CLK_BUS_PERIPHERAL_3            8000000ul
-#define SYS_CLK_BUS_PERIPHERAL_4            8000000ul
-#define SYS_CLK_BUS_PERIPHERAL_5            8000000ul
-#define SYS_CLK_BUS_PERIPHERAL_6            2000000ul
-#define SYS_CLK_BUS_PERIPHERAL_7            8000000ul
+#define SYS_CLK_FREQ                        12288000ul
+#define SYS_CLK_BUS_PERIPHERAL_1            12288000ul
+#define SYS_CLK_BUS_PERIPHERAL_2            12288000ul
+#define SYS_CLK_BUS_PERIPHERAL_3            12288000ul
+#define SYS_CLK_BUS_PERIPHERAL_4            12288000ul
+#define SYS_CLK_BUS_PERIPHERAL_5            12288000ul
+#define SYS_CLK_BUS_PERIPHERAL_6            3072000ul
+#define SYS_CLK_BUS_PERIPHERAL_7            12288000ul
+#define SYS_CLK_BUS_REFERENCE_1             3072000ul
+#define SYS_CLK_BUS_REFERENCE_4             48000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         12288000ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       32768ul
    
 /*** Ports System Service Configuration ***/
-#define SYS_PORT_A_ANSEL        0xFB7F
-#define SYS_PORT_A_TRIS         0xFFFF
+#define SYS_PORT_A_ANSEL        0xE26F
+#define SYS_PORT_A_TRIS         0xFFEF
 #define SYS_PORT_A_LAT          0x0000
 #define SYS_PORT_A_ODC          0x0000
 #define SYS_PORT_A_CNPU         0x0000
 #define SYS_PORT_A_CNPD         0x0000
 #define SYS_PORT_A_CNEN         0x0000
 
-#define SYS_PORT_B_ANSEL        0x01C7
+#define SYS_PORT_B_ANSEL        0x0187
 #define SYS_PORT_B_TRIS         0xFFFF
 #define SYS_PORT_B_LAT          0x0000
 #define SYS_PORT_B_ODC          0x0000
@@ -126,7 +129,7 @@ extern "C" {
 #define SYS_PORT_D_CNEN         0x0000
 
 #define SYS_PORT_E_ANSEL        0x3FFF
-#define SYS_PORT_E_TRIS         0xFFFF
+#define SYS_PORT_E_TRIS         0x3FFF
 #define SYS_PORT_E_LAT          0x0000
 #define SYS_PORT_E_ODC          0x0000
 #define SYS_PORT_E_CNPU         0x0000
@@ -141,13 +144,16 @@ extern "C" {
 #define SYS_PORT_F_CNPD         0x0000
 #define SYS_PORT_F_CNEN         0x0000
 
-#define SYS_PORT_G_ANSEL        0xFF3F
+#define SYS_PORT_G_ANSEL        0xFE3F
 #define SYS_PORT_G_TRIS         0xFFFF
 #define SYS_PORT_G_LAT          0x0000
 #define SYS_PORT_G_ODC          0x0000
 #define SYS_PORT_G_CNPU         0x0000
 #define SYS_PORT_G_CNPD         0x0000
 #define SYS_PORT_G_CNEN         0x0000
+
+#define SYS_CONSOLE_DEVICE_MAX_INSTANCES        1
+#define SYS_CONSOLE_INSTANCES_NUMBER            1
 
 
 /*** Interrupt System Service Configuration ***/
@@ -158,12 +164,32 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+
+/*** SPI Driver Configuration ***/
+#define DRV_SPI_NUMBER_OF_MODULES		6
+/*** Driver Compilation and static configuration options. ***/
+/*** Select SPI compilation units.***/
+#define DRV_SPI_POLLED 				0
+#define DRV_SPI_ISR 				1
+#define DRV_SPI_MASTER 				1
+#define DRV_SPI_SLAVE 				0
+#define DRV_SPI_RM 					0
+#define DRV_SPI_EBM 				1
+#define DRV_SPI_8BIT 				1
+#define DRV_SPI_16BIT 				1
+#define DRV_SPI_32BIT 				0
+#define DRV_SPI_DMA 				0
+
+/*** SPI Driver Static Allocation Options ***/
+#define DRV_SPI_INSTANCES_NUMBER 		3
+#define DRV_SPI_CLIENTS_NUMBER 			3
+#define DRV_SPI_ELEMENTS_PER_QUEUE 		10
 // *****************************************************************************
 /* USART Driver Configuration Options
 */
 #define DRV_USART_INSTANCES_NUMBER                  1
 #define DRV_USART_CLIENTS_NUMBER                    1
-#define DRV_USART_INTERRUPT_MODE                    false
+#define DRV_USART_INTERRUPT_MODE                    true
 #define DRV_USART_BYTE_MODEL_SUPPORT                false
 #define DRV_USART_READ_WRITE_MODEL_SUPPORT          true
 #define DRV_USART_BUFFER_QUEUE_SUPPORT              false
@@ -174,6 +200,9 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
 
+// *****************************************************************************
+/* BSP Configuration Options
+*/
 
 
 // *****************************************************************************
@@ -182,6 +211,9 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
 /*** Application Defined Pins ***/
+
+/*** Functions for BSP_SWITCH_1 pin ***/
+#define BSP_SWITCH_1StateGet() PLIB_PORTS_PinGet(PORTS_ID_0, PORT_CHANNEL_None, PORTS_BIT_POS_-1)
 
 /*** Functions for TRIGGER pin ***/
 #define TRIGGER_PORT PORT_CHANNEL_A
@@ -198,6 +230,16 @@ extern "C" {
 #define DAC_ZEROH_PIN PORTS_BIT_POS_7
 #define DAC_ZEROH_PIN_MASK (0x1 << 7)
 
+/*** Functions for ENC_B pin ***/
+#define ENC_B_PORT PORT_CHANNEL_A
+#define ENC_B_PIN PORTS_BIT_POS_12
+#define ENC_B_PIN_MASK (0x1 << 12)
+
+/*** Functions for ENC_A pin ***/
+#define ENC_A_PORT PORT_CHANNEL_A
+#define ENC_A_PIN PORTS_BIT_POS_11
+#define ENC_A_PIN_MASK (0x1 << 11)
+
 /*** Functions for LED2 pin ***/
 #define LED2_PORT PORT_CHANNEL_E
 #define LED2_PIN PORTS_BIT_POS_14
@@ -207,6 +249,11 @@ extern "C" {
 #define LED1_PORT PORT_CHANNEL_E
 #define LED1_PIN PORTS_BIT_POS_15
 #define LED1_PIN_MASK (0x1 << 15)
+
+/*** Functions for BAR_DAC_CS pin ***/
+#define BAR_DAC_CS_PORT PORT_CHANNEL_A
+#define BAR_DAC_CS_PIN PORTS_BIT_POS_4
+#define BAR_DAC_CS_PIN_MASK (0x1 << 4)
 
 /*** Functions for BUTTON2 pin ***/
 #define BUTTON2_PORT PORT_CHANNEL_F

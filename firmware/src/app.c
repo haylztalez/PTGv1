@@ -77,7 +77,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 APP_DATA appData;
-static uint8_t usartRWTxData[] = "Luke, I am your father\r\n";
+static uint8_t usartRWTxData[] = "Hello World\r\n";
 static enum 
 {
     USART_RW_INIT,

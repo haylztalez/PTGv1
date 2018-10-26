@@ -118,12 +118,30 @@ SYS_MODULE_OBJ DRV_USART0_Initialize(void)
             clockSource,
             115200);  /*Desired Baud rate value*/
 
+    /* Clear the interrupts to be on the safer side*/
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_TRANSMIT);
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_RECEIVE);
+    SYS_INT_SourceStatusClear(INT_SOURCE_USART_1_ERROR);
+
+    /* Enable the error interrupt source */
+    SYS_INT_SourceEnable(INT_SOURCE_USART_1_ERROR);
+
+
     /* Return the driver instance value*/
     return (SYS_MODULE_OBJ)DRV_USART_INDEX_0;
 }
 
 void  DRV_USART0_Deinitialize(void)
 {
+    bool status;
+
+    /* Disable the interrupts */
+    status = SYS_INT_SourceDisable(INT_SOURCE_USART_1_TRANSMIT) ;
+    status = SYS_INT_SourceDisable(INT_SOURCE_USART_1_RECEIVE) ;
+    status = SYS_INT_SourceDisable(INT_SOURCE_USART_1_ERROR);
+    /* Ignore the warning */
+    (void)status;
+
     /* Disable USART module */
     PLIB_USART_Disable (USART_ID_1);
 
@@ -260,6 +278,7 @@ void _DRV_USART0_BufferQueueRxTasks(void)
 {
     DRV_USART_BUFFER_OBJ * bufferObj;
     DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
+    bool status;
 
     dObj = &gDrvUSART0Obj;
 
@@ -330,6 +349,14 @@ void _DRV_USART0_BufferQueueRxTasks(void)
         }
     }
 
+    if(dObj->queueRead == NULL)
+    {
+        /* The queue is empty. We can disable the interrupt */
+        status = SYS_INT_SourceDisable(INT_SOURCE_USART_1_RECEIVE);
+        /* Ignore the warning */
+        (void)status;
+    }
+
 }
 
 void _DRV_USART0_BufferQueueTxTasks(void)
@@ -338,6 +365,7 @@ void _DRV_USART0_BufferQueueTxTasks(void)
 
     DRV_USART_BUFFER_OBJ * bufferObj;
     DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
+    bool status;
 
     dObj = &gDrvUSART0Obj;
     bufferObj = dObj->queueWrite;
@@ -405,6 +433,13 @@ void _DRV_USART0_BufferQueueTxTasks(void)
             bufferObj->nCurrentBytes ++;
         }
     }
+    else
+    {
+        /* If the queue is empty, then disable the TX interrupt */
+        status = SYS_INT_SourceDisable(INT_SOURCE_USART_1_TRANSMIT);
+        /* Ignore the warning */
+        (void)status;
+    }
 
 }
 
@@ -413,6 +448,7 @@ void _DRV_USART0_BufferQueueErrorTasks(void)
     DRV_USART_OBJ *dObj = (DRV_USART_OBJ*)NULL;
     DRV_USART_BUFFER_OBJ * bufferObj;
     bool mutexGrabbed  = true;
+    bool status = false;
 
     dObj = &gDrvUSART0Obj;
 
@@ -462,6 +498,14 @@ void _DRV_USART0_BufferQueueErrorTasks(void)
             {
                 /* Reset the updated head's previous pointer */
                 dObj->queueRead->previous = NULL;
+            }
+            else
+            {
+                /* Queue is empty disable the RX interrupt */
+                status = SYS_INT_SourceDisable(INT_SOURCE_USART_1_RECEIVE);
+
+                /* Ignore the warning */
+                (void)status;
             }
         }
         else

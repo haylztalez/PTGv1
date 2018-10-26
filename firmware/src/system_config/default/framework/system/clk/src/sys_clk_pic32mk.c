@@ -118,8 +118,16 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
   
  
 
-    /* Disable REFCLKO1*/
-    PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_1 );
+    /* Enable and configure REFCLKO1*/
+    
+    /* ROSEL Primary Oscillator POSC */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 2 );
+    /* RODIV */
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 2 );
+    /* ROTRIM */
+    PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_1, 0 );
+
+    PLIB_OSC_ReferenceOscEnable ( OSC_ID_0, OSC_REFERENCE_1 );
     /* Disable REFCLK1_OE*/
     PLIB_OSC_ReferenceOutputDisable ( OSC_ID_0, OSC_REFERENCE_1 );
     /* Disable REFCLKO2*/
@@ -130,8 +138,16 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
     PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_3 );
     /* Disable REFCLK3_OE*/
     PLIB_OSC_ReferenceOutputDisable ( OSC_ID_0, OSC_REFERENCE_3 );
-    /* Disable REFCLKO4*/
-    PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_4 );
+    /* Enable and configure REFCLKO4*/
+    
+    /* ROSEL Primary Oscillator POSC */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_4, 2 );
+    /* RODIV */
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_4, 128 );
+    /* ROTRIM */
+    PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_4, 0 );
+
+    PLIB_OSC_ReferenceOscEnable ( OSC_ID_0, OSC_REFERENCE_4 );
     /* Disable REFCLK4_OE*/
     PLIB_OSC_ReferenceOutputDisable ( OSC_ID_0, OSC_REFERENCE_4 );
 
@@ -281,12 +297,14 @@ inline uint32_t SYS_CLK_ReferenceFrequencyGet ( CLK_BUSES_REFERENCE referenceBus
     switch (referenceBus)
     {
         case CLK_BUS_REFERENCE_1:
+                freq = SYS_CLK_BUS_REFERENCE_1;
             break;
         case CLK_BUS_REFERENCE_2:
             break;
         case CLK_BUS_REFERENCE_3:
             break;
         case CLK_BUS_REFERENCE_4:
+                freq = SYS_CLK_BUS_REFERENCE_4;
             break;
         case CLK_BUS_REFERENCE_5:
             break;
