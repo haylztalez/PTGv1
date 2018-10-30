@@ -76,6 +76,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     
     Application strings and buffers are be defined outside this structure.
 */
+//#define TIMER = 1;
 
 APP_DATA appData;
 int i=0;
@@ -198,6 +199,7 @@ void APP_Initialize ( void )
   Remarks:
     See prototype in app.h.
  */
+#define LED2_ON() PLIB_PORTS_PinSet(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
 
 void APP_Tasks ( void )
 {
@@ -236,6 +238,8 @@ void APP_Tasks ( void )
             printf("Yo");
             i++;
         }
+         LED2_ON();
+         
             //printf("Hi\n");
         
             break;
