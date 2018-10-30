@@ -93,8 +93,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /*** DEVCFG2 ***/
 
 #pragma config FPLLIDIV =   DIV_1
-#pragma config FPLLRNG =    RANGE_5_10_MHZ
-#pragma config FPLLICLK =   PLL_FRC
+#pragma config FPLLRNG =    RANGE_8_16_MHZ
+#pragma config FPLLICLK =   PLL_POSC
 #pragma config FPLLMULT =   MUL_32
 #pragma config FPLLODIV =   DIV_32
 #pragma config VBATBOREN =  ON
@@ -128,34 +128,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Driver Initialization Data
 // *****************************************************************************
 // *****************************************************************************
- // <editor-fold defaultstate="collapsed" desc="DRV_I2S Initialization Data">
-/*** I2S Driver Initialization Data ***/
-const DRV_I2S_INIT drvI2S0InitData =
-{
-    .moduleInit.value = DRV_I2S_POWER_STATE_IDX0,
-    .spiID = DRV_I2S_PERIPHERAL_ID_IDX0, 
-    .usageMode = DRV_I2S_USAGE_MODE_IDX0,
-    .baudClock = SPI_BAUD_RATE_CLK_IDX0,
-    .baud = DRV_I2S_BAUD_RATE,
-    .clockMode = DRV_I2S_CLK_MODE_IDX0,
-    .audioCommWidth = SPI_AUDIO_COMM_WIDTH_IDX0,
-    .audioTransmitMode = SPI_AUDIO_TRANSMIT_MODE_IDX0,
-    .inputSamplePhase = SPI_INPUT_SAMPLING_PHASE_IDX0,
-    .protocolMode = DRV_I2S_AUDIO_PROTOCOL_MODE_IDX0,
-    .txInterruptSource = DRV_I2S_TX_INT_SRC_IDX0,
-    .rxInterruptSource = DRV_I2S_RX_INT_SRC_IDX0,
-    .errorInterruptSource = DRV_I2S_ERR_INT_SRC_IDX0,
-    .queueSizeTransmit = QUEUE_SIZE_TX_IDX0,
-    .queueSizeReceive = QUEUE_SIZE_RX_IDX0,
-    .dmaChannelTransmit = DMA_CHANNEL_NONE,
-    .dmaChannelReceive = DMA_CHANNEL_NONE,
-};
-
-
-
-
-
-// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="DRV_USART Initialization Data">
 // </editor-fold>
 
@@ -206,9 +178,6 @@ void SYS_Initialize ( void* data )
     SYS_PORTS_Initialize();
 
     /* Initialize Drivers */
-    sysObj.drvI2S0 = DRV_I2S_Initialize(DRV_I2S_INDEX_0, (SYS_MODULE_INIT *)&drvI2S0InitData);
-
-
     sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART1_TX, INT_PRIORITY_LEVEL1);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1_TX, INT_SUBPRIORITY_LEVEL0);

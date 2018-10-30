@@ -91,7 +91,7 @@ void _mon_putc(const char print_byte)
 {
     while(DRV_USART_TransmitBufferIsFull(appData.handleUSART0)) 
     {
-        
+
     }
 
     DRV_USART_WriteByte(appData.handleUSART0, print_byte);
@@ -209,7 +209,7 @@ void APP_Tasks ( void )
         case APP_STATE_INIT:
         {
             bool appInitialized = true;
-            
+       
        
             if (appData.handleUSART0 == DRV_HANDLE_INVALID)
             {
@@ -237,7 +237,7 @@ void APP_Tasks ( void )
             i++;
         }
             //printf("Hi\n");
-            
+        
             break;
         }
 
