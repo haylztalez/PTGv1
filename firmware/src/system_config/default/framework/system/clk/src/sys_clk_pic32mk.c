@@ -123,17 +123,25 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
     /* ROSEL Primary Oscillator POSC */
     PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 2 );
     /* RODIV */
-    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 3 );
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 1 );
     /* ROTRIM */
-    PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_1, 511 );
+    PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_1, 0 );
 
     PLIB_OSC_ReferenceOscEnable ( OSC_ID_0, OSC_REFERENCE_1 );
     /* Disable REFCLK1_OE*/
     PLIB_OSC_ReferenceOutputEnable ( OSC_ID_0, OSC_REFERENCE_1 );
-    /* Disable REFCLKO2*/
-    PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_2 );
+    /* Enable and configure REFCLKO2*/
+    
+    /* ROSEL System PLL output SPLL */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_2, 7 );
+    /* RODIV */
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_2, 2 );
+    /* ROTRIM */
+    PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_2, 0 );
+
+    PLIB_OSC_ReferenceOscEnable ( OSC_ID_0, OSC_REFERENCE_2 );
     /* Disable REFCLK2_OE*/
-    PLIB_OSC_ReferenceOutputDisable ( OSC_ID_0, OSC_REFERENCE_2 );
+    PLIB_OSC_ReferenceOutputEnable ( OSC_ID_0, OSC_REFERENCE_2 );
     /* Disable REFCLKO3*/
     PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_3 );
     /* Disable REFCLK3_OE*/
@@ -300,6 +308,7 @@ inline uint32_t SYS_CLK_ReferenceFrequencyGet ( CLK_BUSES_REFERENCE referenceBus
                 freq = SYS_CLK_BUS_REFERENCE_1;
             break;
         case CLK_BUS_REFERENCE_2:
+                freq = SYS_CLK_BUS_REFERENCE_2;
             break;
         case CLK_BUS_REFERENCE_3:
             break;

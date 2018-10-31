@@ -89,7 +89,8 @@ extern "C" {
 #define SYS_CLK_BUS_PERIPHERAL_5            12288000ul
 #define SYS_CLK_BUS_PERIPHERAL_6            3072000ul
 #define SYS_CLK_BUS_PERIPHERAL_7            12288000ul
-#define SYS_CLK_BUS_REFERENCE_1             3073500ul
+#define SYS_CLK_BUS_REFERENCE_1             12288000ul
+#define SYS_CLK_BUS_REFERENCE_2             3072000ul
 #define SYS_CLK_BUS_REFERENCE_4             48000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         24576000ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       32768ul

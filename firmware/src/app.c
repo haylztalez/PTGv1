@@ -229,7 +229,7 @@ void APP_Tasks ( void )
         {
             
 			//USART_Task();
-            printf("Hi\r\n");
+            printf("Hi\n");
             
             break;
         }

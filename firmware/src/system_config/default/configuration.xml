@@ -124,7 +124,7 @@
       <Template dnOrder="1">
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum dnOrder="2">C2E8A0CE61FF3535A1DEA96274CCE188</Checksum>
+        <Checksum dnOrder="2">4990DAB8E25A3DD999924BD6E1D347DA</Checksum>
         <ProjectFileChecksum dnOrder="3">7E55F75FC7DFE0903A1C0820F6C7C27B</ProjectFileChecksum>
       </Template>
       <Template dnOrder="2">
@@ -154,7 +154,7 @@
       <Template dnOrder="6">
         <Name dnOrder="0">sys_clk_pic32mk.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
-        <Checksum dnOrder="2">DF60D50CCFE45470B18468A15279AB03</Checksum>
+        <Checksum dnOrder="2">69A5A6284C8E56B3D905DBB1F48D1FDD</Checksum>
         <ProjectFileChecksum dnOrder="3">C2D1C50C673A5CD5263E8D5DAEF1EC5A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="7">
@@ -208,7 +208,7 @@
       <Template dnOrder="15">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">5B890E4DCE68DF4725C8B78A39F31398</Checksum>
+        <Checksum dnOrder="2">4D3C579F9C8E5264799DA1000CF10950</Checksum>
         <ProjectFileChecksum dnOrder="3">6986FCF2489827C94944045B00716A6A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="16">
