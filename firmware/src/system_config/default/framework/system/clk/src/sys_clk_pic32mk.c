@@ -132,10 +132,10 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
     PLIB_OSC_ReferenceOutputEnable ( OSC_ID_0, OSC_REFERENCE_1 );
     /* Enable and configure REFCLKO2*/
     
-    /* ROSEL Primary Oscillator POSC */
-    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_2, 2 );
+    /* ROSEL System PLL output SPLL */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_2, 7 );
     /* RODIV */
-    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_2, 4 );
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_2, 2 );
     /* ROTRIM */
     PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_2, 0 );
 

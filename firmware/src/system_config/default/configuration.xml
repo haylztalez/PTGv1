@@ -174,7 +174,7 @@
       <Template dnOrder="2">
         <Name dnOrder="0">sys_clk_pic32mk.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
-        <Checksum dnOrder="2">A4C7C7C968C965618016747D64B2742A</Checksum>
+        <Checksum dnOrder="2">3AC981C13EA9CAEFB89F493B58299D30</Checksum>
         <ProjectFileChecksum dnOrder="3">C2D1C50C673A5CD5263E8D5DAEF1EC5A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="3">
