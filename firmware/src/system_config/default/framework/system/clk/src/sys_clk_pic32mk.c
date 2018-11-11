@@ -106,12 +106,12 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
     /* Enable Peripheral Bus 4 */
     PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 3, 1 );
     PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 3 );
-    /* Enable Peripheral Bus 5 */
-    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 4, 1 );
-    PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 4 );
-    /* Enable Peripheral Bus 6 */
-    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 5, 4 );
-    PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 5 );
+       /* Disable Peripheral Bus 5 */
+    PLIB_OSC_PBOutputClockDisable (OSC_ID_0, 4 );
+
+       /* Disable Peripheral Bus 6 */
+    PLIB_OSC_PBOutputClockDisable (OSC_ID_0, 5 );
+
     /* Enable Peripheral Bus 7 */
     PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 6, 1 );
     PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 6 );
@@ -249,10 +249,8 @@ inline uint32_t SYS_CLK_PeripheralFrequencyGet ( CLK_BUSES_PERIPHERAL peripheral
                 freq = SYS_CLK_BUS_PERIPHERAL_4;
             break;
         case CLK_BUS_PERIPHERAL_5:
-                freq = SYS_CLK_BUS_PERIPHERAL_5;
             break;
         case CLK_BUS_PERIPHERAL_6:
-                freq = SYS_CLK_BUS_PERIPHERAL_6;
             break;
         case CLK_BUS_PERIPHERAL_7:
                 freq = SYS_CLK_BUS_PERIPHERAL_7;

@@ -52,6 +52,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/devcon/sys_devcon.h"
 #include "system/clk/sys_clk.h"
 #include "system/int/sys_int.h"
+#include "driver/i2s/drv_i2s.h"
 #include "driver/usart/drv_usart_static.h"
 #include "system/ports/sys_ports.h"
 #include "driver/spi/static/drv_spi_static.h"
@@ -89,6 +90,7 @@ extern "C" {
 
 typedef struct
 {
+    SYS_MODULE_OBJ  drvI2S0;
 
     SYS_MODULE_OBJ  drvUsart0;
 

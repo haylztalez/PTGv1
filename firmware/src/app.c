@@ -77,16 +77,20 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     Application strings and buffers are be defined outside this structure.
 */
 
+/* defining LEDS with peripheral library*/
 #define LED1_ON() PLIB_PORTS_PinSet( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_15);
 #define LED1_OFF() PLIB_PORTS_PinClear( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_15);
-#define LED1_TOGGLE() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_15);
 #define LED2_ON() PLIB_PORTS_PinSet( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
 #define LED2_OFF() PLIB_PORTS_PinClear( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
-#define LED2_TOGGLE() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
 
+/* defining LEDS using LAT register */
+#define LED1 LATEbits.LATE15
 
-/* defining BUTTON1 */
+/* defining BUTTONS using PORT registers */
 #define BUTTON1 PORTBbits.RB10
+#define BUTTON2 PORTFbits.RF1
+#define BUTTON3 PORTBbits.RB12
+#define BUTTON4 PORTBbits.RB11
 
 /* delay function, used as delay_ms(100) to delay 100 ms */
 void delay_ms(int n){
@@ -99,7 +103,9 @@ void delay_ms(int n){
 
 
 APP_DATA appData;
-static uint8_t app_tx_buf[] = "Hello World\r\n";
+//static uint8_t app_tx_buf[] = "Hello World\r\n";
+
+
 static enum 
 {
     USART_BM_INIT,
@@ -119,6 +125,9 @@ void _mon_putc(const char print_byte)
 
     DRV_USART_WriteByte(appData.handleUSART0, print_byte);
 }
+
+unsigned char tx_packet[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -256,16 +265,18 @@ void APP_Tasks ( void )
             
             printf("Hi\n");
             
-            if(!BUTTON1)  // I think this means if button 1 is pressed
-            {
-                LED2_ON();
-                LED1_ON();               
-            }
-            else
-            {
-                LED2_OFF();
-                LED1_OFF();
-            }
+            LED1 = !BUTTON2;
+            
+//            if(!BUTTON2)  // I think this means if button 1 is pressed
+//            {
+//                LED2_ON();
+//                               
+//            }
+//            else
+//            {
+//                LED2_OFF();
+//                //LED1_OFF();
+//            }
 
             
             break;

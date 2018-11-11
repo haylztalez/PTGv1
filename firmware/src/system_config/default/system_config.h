@@ -86,8 +86,6 @@ extern "C" {
 #define SYS_CLK_BUS_PERIPHERAL_2            12288000ul
 #define SYS_CLK_BUS_PERIPHERAL_3            12288000ul
 #define SYS_CLK_BUS_PERIPHERAL_4            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_5            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_6            3072000ul
 #define SYS_CLK_BUS_PERIPHERAL_7            12288000ul
 #define SYS_CLK_BUS_REFERENCE_1             12288000ul
 #define SYS_CLK_BUS_REFERENCE_2             3072000ul
@@ -99,7 +97,7 @@ extern "C" {
 #define SYS_PORT_A_ANSEL        0xE26F
 #define SYS_PORT_A_TRIS         0xFFEF
 #define SYS_PORT_A_LAT          0x0000
-#define SYS_PORT_A_ODC          0x0000
+#define SYS_PORT_A_ODC          0x0100
 #define SYS_PORT_A_CNPU         0x0000
 #define SYS_PORT_A_CNPD         0x0000
 #define SYS_PORT_A_CNEN         0x0000
@@ -132,7 +130,7 @@ extern "C" {
 #define SYS_PORT_E_TRIS         0x3FFF
 #define SYS_PORT_E_LAT          0x0000
 #define SYS_PORT_E_ODC          0x0000
-#define SYS_PORT_E_CNPU         0x0000
+#define SYS_PORT_E_CNPU         0xC000
 #define SYS_PORT_E_CNPD         0x0000
 #define SYS_PORT_E_CNEN         0x0000
 
@@ -161,6 +159,44 @@ extern "C" {
 // Section: Driver Configuration
 // *****************************************************************************
 // *****************************************************************************
+
+/*** I2S Driver Configuration ***/
+
+
+#define DRV_I2S_INTERRUPT_MODE					true
+#define DRV_I2S_CLIENTS_NUMBER					1
+#define DRV_I2S_INSTANCES_NUMBER				1
+#define DRV_I2S_STOP_IN_IDLE					false
+#define DRV_I2S_PERIPHERAL_ID_IDX0				SPI_ID_1
+#define DRV_I2S_USAGE_MODE_IDX0					DRV_I2S_MODE_MASTER
+#define DRV_I2S_STOP_IN_IDLE_IDX0				false
+#define SPI_BAUD_RATE_CLK_IDX0					SPI_BAUD_RATE_MCLK_CLOCK
+#define DRV_I2S_BAUD_RATE                       48000
+#define DRV_I2S_CLK_MODE_IDX0					DRV_I2S_CLOCK_MODE_IDLE_LOW_EDGE_RISE
+#define SPI_AUDIO_COMM_WIDTH_IDX0				SPI_AUDIO_COMMUNICATION_24DATA_32FIFO_32CHANNEL
+#define SPI_AUDIO_TRANSMIT_MODE_IDX0			SPI_AUDIO_TRANSMIT_STEREO
+#define SPI_INPUT_SAMPLING_PHASE_IDX0			SPI_INPUT_SAMPLING_PHASE_IN_MIDDLE
+#define DRV_I2S_AUDIO_PROTOCOL_MODE_IDX0		DRV_I2S_AUDIO_LFET_JUSTIFIED
+#define DRV_I2S_TX_INT_SRC_IDX0					INT_SOURCE_SPI_1_TRANSMIT
+#define DRV_I2S_RX_INT_SRC_IDX0					INT_SOURCE_SPI_1_RECEIVE
+#define DRV_I2S_ERR_INT_SRC_IDX0				INT_SOURCE_SPI_1_ERROR
+#define DRV_I2S_TX_INT_VECTOR_IDX0				INT_VECTOR_SPI1_TX
+#define DRV_I2S_TX_INT_PRIORITY_IDX0			
+#define DRV_I2S_TX_INT_SUB_PRIORITY_IDX0		
+#define DRV_I2S_TX_ISR_VECTOR_IDX0				
+#define DRV_I2S_RX_INT_VECTOR_IDX0				INT_VECTOR_SPI1_RX
+#define DRV_I2S_RX_INT_PRIORITY_IDX0			
+#define DRV_I2S_RX_INT_SUB_PRIORITY_IDX0		
+#define DRV_I2S_RX_ISR_VECTOR_IDX0				
+#define DRV_I2S_ERR_INT_VECTOR_IDX0				INT_VECTOR_SPI1_FAULT
+#define DRV_I2S_ERR_INT_PRIORITY_IDX0			
+#define DRV_I2S_ERR_INT_SUB_PRIORITY_IDX0		
+#define DRV_I2S_ERR_ISR_VECTOR_IDX0				
+#define QUEUE_SIZE_TX_IDX0                      3
+#define QUEUE_SIZE_RX_IDX0                      2
+#define DRV_I2S_POWER_STATE_IDX0				SYS_MODULE_POWER_RUN_FULL
+#define DRV_I2S_QUEUE_DEPTH_COMBINED     		5
+
 
 /*** SPI Driver Configuration ***/
 #define DRV_SPI_NUMBER_OF_MODULES		6
