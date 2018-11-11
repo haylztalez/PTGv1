@@ -81,15 +81,14 @@ extern "C" {
 // *****************************************************************************
 /* Clock System Service Configuration Options
 */
-#define SYS_CLK_FREQ                        12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_1            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_2            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_3            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_4            12288000ul
-#define SYS_CLK_BUS_PERIPHERAL_7            12288000ul
+#define SYS_CLK_FREQ                        98304000ul
+#define SYS_CLK_BUS_PERIPHERAL_1            98304000ul
+#define SYS_CLK_BUS_PERIPHERAL_2            6144000ul
+#define SYS_CLK_BUS_PERIPHERAL_3            98304000ul
+#define SYS_CLK_BUS_PERIPHERAL_4            98304000ul
+#define SYS_CLK_BUS_PERIPHERAL_7            98304000ul
 #define SYS_CLK_BUS_REFERENCE_1             12288000ul
-#define SYS_CLK_BUS_REFERENCE_2             3072000ul
-#define SYS_CLK_BUS_REFERENCE_4             48000ul
+#define SYS_CLK_BUS_REFERENCE_3             12288000ul
 #define SYS_CLK_CONFIG_PRIMARY_XTAL         24576000ul
 #define SYS_CLK_CONFIG_SECONDARY_XTAL       32768ul
    
@@ -170,7 +169,7 @@ extern "C" {
 #define DRV_I2S_PERIPHERAL_ID_IDX0				SPI_ID_1
 #define DRV_I2S_USAGE_MODE_IDX0					DRV_I2S_MODE_MASTER
 #define DRV_I2S_STOP_IN_IDLE_IDX0				false
-#define SPI_BAUD_RATE_CLK_IDX0					SPI_BAUD_RATE_MCLK_CLOCK
+#define SPI_BAUD_RATE_CLK_IDX0					SPI_BAUD_RATE_PBCLK_CLOCK
 #define DRV_I2S_BAUD_RATE                       48000
 #define DRV_I2S_CLK_MODE_IDX0					DRV_I2S_CLOCK_MODE_IDLE_LOW_EDGE_RISE
 #define SPI_AUDIO_COMM_WIDTH_IDX0				SPI_AUDIO_COMMUNICATION_24DATA_32FIFO_32CHANNEL

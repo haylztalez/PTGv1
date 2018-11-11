@@ -162,7 +162,7 @@
       <Template dnOrder="0">
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
-        <Checksum dnOrder="2">01914C90E8CE2DE47E17A56DAB0D4E54</Checksum>
+        <Checksum dnOrder="2">128E23F6E1BED7EC9FFFCD8912B77082</Checksum>
         <ProjectFileChecksum dnOrder="3">7E55F75FC7DFE0903A1C0820F6C7C27B</ProjectFileChecksum>
       </Template>
       <Template dnOrder="1">
@@ -174,7 +174,7 @@
       <Template dnOrder="2">
         <Name dnOrder="0">sys_clk_pic32mk.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
-        <Checksum dnOrder="2">3AC981C13EA9CAEFB89F493B58299D30</Checksum>
+        <Checksum dnOrder="2">593164AF032F63BFF8FCA47CB3C9449A</Checksum>
         <ProjectFileChecksum dnOrder="3">C2D1C50C673A5CD5263E8D5DAEF1EC5A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="3">
@@ -222,7 +222,7 @@
       <Template dnOrder="10">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">28A57A32C045A6B69136ACBC650D66F3</Checksum>
+        <Checksum dnOrder="2">38F1872C1292DD9C81569F4B8C8ED3A7</Checksum>
         <ProjectFileChecksum dnOrder="3">F64381DED573293AC497CF1FDD37B5D7</ProjectFileChecksum>
       </Template>
       <Template dnOrder="11">
@@ -234,7 +234,7 @@
       <Template dnOrder="12">
         <Name dnOrder="0">drv_spi_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
-        <Checksum dnOrder="2">B691768E761AEEADCB77C79E6733E435</Checksum>
+        <Checksum dnOrder="2">898DFC8D05171A8A73499B1376F91DFE</Checksum>
         <ProjectFileChecksum dnOrder="3">15302CF74334BD3E879D84BF5DCB3297</ProjectFileChecksum>
       </Template>
       <Template dnOrder="13">
@@ -300,7 +300,7 @@
       <Template dnOrder="23">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">89559A1E6FC70BA1215820F077B202DC</Checksum>
+        <Checksum dnOrder="2">9EA466FA528B03299C8C673F42556532</Checksum>
         <ProjectFileChecksum dnOrder="3">6986FCF2489827C94944045B00716A6A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="24">

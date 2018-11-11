@@ -96,7 +96,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #pragma config FPLLRNG =    RANGE_13_26_MHZ
 #pragma config FPLLICLK =   PLL_POSC
 #pragma config FPLLMULT =   MUL_16
-#pragma config FPLLODIV =   DIV_32
+#pragma config FPLLODIV =   DIV_4
 #pragma config VBATBOREN =  ON
 #pragma config DSBOREN =    ON
 #pragma config DSWDTPS =    DSPS32
