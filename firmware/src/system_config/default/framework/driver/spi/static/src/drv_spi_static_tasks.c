@@ -49,9 +49,13 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 
 
-int32_t DRV_SPI0_PolledMasterEBM16BitTasks ( struct DRV_SPI_OBJ * dObj )
+int32_t DRV_SPI0_ISRMasterEBM8BitTasks ( struct DRV_SPI_OBJ * dObj )
 {
     volatile bool continueLoop;
+    /* Disable the interrupts */
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_RECEIVE);
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_TRANSMIT);
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_ERROR);
     do {
         
         DRV_SPI_JOB_OBJECT * currentJob = dObj->currentJob;
@@ -59,13 +63,14 @@ int32_t DRV_SPI0_PolledMasterEBM16BitTasks ( struct DRV_SPI_OBJ * dObj )
         /* Check for a new task */
         if (dObj->currentJob == NULL)
         {
-            if (DRV_SPI_SYS_QUEUE_DequeueLock(dObj->queue, (void *)&(dObj->currentJob)) != DRV_SPI_SYS_QUEUE_SUCCESS)
+            if (DRV_SPI_SYS_QUEUE_Dequeue(dObj->queue, (void *)&(dObj->currentJob)) != DRV_SPI_SYS_QUEUE_SUCCESS)
             {
                 SYS_ASSERT(false, "\r\nSPI Driver: Error in dequeing.");
                 return 0;
             }
             if (dObj->currentJob == NULL)
             {
+                dObj->txEnabled = false;
                 return 0;
             }
             currentJob = dObj->currentJob;
@@ -80,6 +85,11 @@ int32_t DRV_SPI0_PolledMasterEBM16BitTasks ( struct DRV_SPI_OBJ * dObj )
 
             /* List the new job as processing*/
             currentJob->status = DRV_SPI_BUFFER_EVENT_PROCESSING;
+            if (currentJob->dataLeftToTx +currentJob->dummyLeftToTx > PLIB_SPI_RX_8BIT_FIFO_SIZE(SPI_ID_3))
+            {
+                PLIB_SPI_FIFOInterruptModeSelect(SPI_ID_3, SPI_FIFO_INTERRUPT_WHEN_TRANSMIT_BUFFER_IS_1HALF_EMPTY_OR_MORE);
+                PLIB_SPI_FIFOInterruptModeSelect(SPI_ID_3, SPI_FIFO_INTERRUPT_WHEN_RECEIVE_BUFFER_IS_1HALF_FULL_OR_MORE);
+            }
             /* Flush out the Receive buffer */
             PLIB_SPI_BufferClear(SPI_ID_3);
         }
@@ -91,10 +101,10 @@ int32_t DRV_SPI0_PolledMasterEBM16BitTasks ( struct DRV_SPI_OBJ * dObj )
             if
             (currentJob->dataLeftToTx +currentJob->dummyLeftToTx != 0)
         {
-            DRV_SPI0_MasterEBMSend16BitPolled(dObj);
+            DRV_SPI0_MasterEBMSend8BitISR(dObj);
         }
         
-        DRV_SPI0_PolledErrorTasks(dObj);
+        DRV_SPI0_ISRErrorTasks(dObj);
         
         /* Figure out how many bytes are left to be received */
         volatile size_t bytesLeft = currentJob->dataLeftToRx + currentJob->dummyLeftToRx;
@@ -102,11 +112,13 @@ int32_t DRV_SPI0_PolledMasterEBM16BitTasks ( struct DRV_SPI_OBJ * dObj )
         // Check to see if we have any data left to receive and update the bytes left.
         if (bytesLeft != 0)
         {
-            DRV_SPI0_MasterEBMReceive16BitPolled(dObj);
+            DRV_SPI0_MasterEBMReceive8BitISR(dObj);
             bytesLeft = currentJob->dataLeftToRx + currentJob->dummyLeftToRx;
         }
         if (bytesLeft == 0)
         {
+                    // Disable the interrupt, or more correctly don't re-enable it later*/
+                    dObj->rxEnabled = false;
                     /* Job is complete*/
                     currentJob->status = DRV_SPI_BUFFER_EVENT_COMPLETE;
                     /* Call the job complete call back*/
@@ -124,18 +136,52 @@ int32_t DRV_SPI0_PolledMasterEBM16BitTasks ( struct DRV_SPI_OBJ * dObj )
                     }
 
                     /* Return the job back to the free queue*/
-                    if (DRV_SPI_SYS_QUEUE_FreeElementLock(dObj->queue, currentJob) != DRV_SPI_SYS_QUEUE_SUCCESS)
+                    if (DRV_SPI_SYS_QUEUE_FreeElement(dObj->queue, currentJob) != DRV_SPI_SYS_QUEUE_SUCCESS)
                     {
                         SYS_ASSERT(false, "\r\nSPI Driver: Queue free element error.");
                         return 0;
                     }
                     /* Clean up */
                     dObj->currentJob = NULL;
+                    if (!DRV_SPI_SYS_QUEUE_IsEmpty(dObj->queue))
+                    {
+                        continueLoop = true;
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
 
 
+        /* Check to see if the interrupts would fire again if so just go back into
+           the loop instead of suffering the interrupt latency of exiting and re-entering*/
+        if (dObj->currentJob != NULL)
+        {   
+            /* Clear the Interrupts */
+            SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_RECEIVE);
+            SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_TRANSMIT);
+            SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_ERROR);
+            /* Interrupts should immediately become active again if they're in a fired condition */
+            if ((SYS_INT_SourceStatusGet(INT_SOURCE_SPI_3_RECEIVE)) ||
+                (SYS_INT_SourceStatusGet(INT_SOURCE_SPI_3_TRANSMIT)) ||
+                (SYS_INT_SourceStatusGet(INT_SOURCE_SPI_3_ERROR)))
+            {
+                /* Interrupt would fire again anyway so we should just go back to the start*/
+                continueLoop = true;
+                continue;
+            }
+             /* If we're here then we know that the interrupt should not be firing again immediately, so re-enable them and exit*/
+                SYS_INT_SourceEnable(INT_SOURCE_SPI_3_RECEIVE);
+                SYS_INT_SourceEnable(INT_SOURCE_SPI_3_TRANSMIT);
+            return 0;
+        }
 
     } while(continueLoop);
+    /* if we're here it means that we have no more jobs in the queue, tx and rx interrupts will be re-enabled by the BufferAdd* functions*/
+    SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_RECEIVE);
+    SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_TRANSMIT);
     return 0;
 }
 

@@ -254,7 +254,7 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI_BufferAddWriteRead ( DRV_HANDLE handle, void *txBu
     {
         case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_SPI0_BufferAddWriteReadNew ( txBuffer, txSize, rxBuffer, rxSize, completeCB, context );
+            returnValue = DRV_SPI0_BufferAddWriteRead ( txBuffer, rxBuffer, txSize );
             break;
         }
         default:

@@ -92,20 +92,29 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #define BUTTON3 PORTBbits.RB12
 #define BUTTON4 PORTBbits.RB11
 
+
+#define SS3_TRIGGER LATFbits.LATF0
+
+
 /* delay function, used as delay_ms(100) to delay 100 ms */
 void delay_ms(int n){
+    float k,l;
+    k = 3.73254;
+    l = 17.234;
 	int i;
 	int j;
 	for (i=0;i<n;i++)
-		for (j=0;j<1000;j++)
-		{;}
+		for (j=0;j<48193;j++)
+		{k = k*l;}
 }
 
 
 APP_DATA appData;
+static uint8_t __attribute__ ((aligned (16))) app_spi_tx_buffer[] = {'H'};
+
+static uint8_t __attribute__ ((aligned (16))) app_spi_rx_buffer[sizeof(app_spi_tx_buffer)];
+
 //static uint8_t app_tx_buf[] = "Hello World\r\n";
-
-
 static enum 
 {
     USART_BM_INIT,
@@ -126,7 +135,13 @@ void _mon_putc(const char print_byte)
     DRV_USART_WriteByte(appData.handleUSART0, print_byte);
 }
 
-unsigned char tx_packet[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+static unsigned char tx_packet[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+
+void send_packet(unsigned char x)
+{
+   
+    DRV_SPI_BufferAddWrite( appData.handleSPI0, tx_packet, x, NULL, NULL );
+}
 
 // *****************************************************************************
 // *****************************************************************************
@@ -142,6 +157,40 @@ unsigned char tx_packet[]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x0
 // Section: Application Local Functions
 // *****************************************************************************
 // *****************************************************************************
+
+/* state machine for the SPI */
+static void SPI_Task(void)
+{
+    /* run the state machine here for SPI */
+    switch (appData.spiStateMachine)
+    {
+        default:
+        case APP_SPI_STATE_START:
+            /* Blocking: When the call exits, all data has been exchanged (if we get a valid handle) */
+            SS3_TRIGGER = 0;
+            appData.drvSPIBufferHandle = DRV_SPI_BufferAddWriteRead(appData.handleSPI0,
+                app_spi_tx_buffer, sizeof(app_spi_tx_buffer),
+                app_spi_rx_buffer, sizeof(app_spi_rx_buffer),
+                0, 0);
+
+            if (DRV_SPI_BUFFER_HANDLE_INVALID != appData.drvSPIBufferHandle)
+            {
+                /* Blocking Write/Read has finished */
+                appData.spiStateMachine =  APP_SPI_STATE_DONE;
+            }
+
+            if (DRV_SPI_BUFFER_HANDLE_INVALID == appData.drvSPIBufferHandle)
+            {
+                /* try again if we get a bad handle */
+                appData.spiStateMachine =  APP_SPI_STATE_START;
+            }
+        break;
+
+        case APP_SPI_STATE_DONE:
+            SS3_TRIGGER = 1;
+        break;
+    }
+}
 
 /******************************************************************************
   Function:
@@ -215,7 +264,9 @@ void APP_Initialize ( void )
     /* Place the App state machine in its initial state. */
     appData.state = APP_STATE_INIT;
 
+    appData.handleSPI0 = DRV_HANDLE_INVALID;
     appData.handleUSART0 = DRV_HANDLE_INVALID;
+    //appData.handleSPI3 = DRV_HANDLE_INVALID;
     
     /* TODO: Initialize your application's state machine and other
      * parameters.
@@ -242,14 +293,28 @@ void APP_Tasks ( void )
         {
             bool appInitialized = true;
        
+
+            if (DRV_HANDLE_INVALID == appData.handleSPI0)
+            {
+                appData.handleSPI0 = DRV_SPI_Open(0, DRV_IO_INTENT_READWRITE);
+                appInitialized &= (DRV_HANDLE_INVALID != appData.handleSPI0);
+            }
             if (appData.handleUSART0 == DRV_HANDLE_INVALID)
             {
                 appData.handleUSART0 = DRV_USART_Open(APP_DRV_USART, DRV_IO_INTENT_READWRITE|DRV_IO_INTENT_NONBLOCKING);
                 appInitialized &= ( DRV_HANDLE_INVALID != appData.handleUSART0 );
             }
+//            
+//            if (appData.handleSPI3 == DRV_HANDLE_INVALID)
+//            {
+//                appData.handleSPI3 = DRV_SPI_Open(APP_DRV_SPI3, DRV_IO_INTENT_READWRITE|DRV_IO_INTENT_BLOCKING);
+//                appInitialized &= ( DRV_HANDLE_INVALID != appData.handleSPI3 );
+//            }
         
             if (appInitialized)
             {
+                /* initialize the SPI state machine */
+                appData.spiStateMachine = APP_SPI_STATE_START;
                 /* initialize the USART state machine */
                 usartBMState = USART_BM_INIT;
             
@@ -260,10 +325,34 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
+            /* run the state machine for servicing the SPI */
+            SPI_Task();
+			
             
+            tx_packet[0] = 'H';
 			//USART_Task(); - original harmony code, unsure if still needed
+            if(!BUTTON1)
+            {
+                send_packet(1);
+            }
             
-            printf("Hi\n");
+            
+            if(appData.spiStateMachine == APP_SPI_STATE_START)
+            {
+                printf("start\n");
+            }
+            else if (appData.spiStateMachine == APP_SPI_STATE_WAIT)
+            {
+                printf("wait\n");
+            }
+            else 
+            {
+                 printf("done\n");
+                 //appData.spiStateMachine = APP_SPI_STATE_START;
+            }
+               
+            
+            //printf("Hi\n");
             
             LED1 = !BUTTON2;
             

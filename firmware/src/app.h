@@ -59,6 +59,13 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 
+typedef enum
+{
+    APP_SPI_STATE_START,
+    APP_SPI_STATE_WAIT,
+    APP_SPI_STATE_DONE
+} APP_SPI_STATES;
+
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -114,7 +121,16 @@ typedef struct
     APP_STATES state;
 
     /* TODO: Define any additional data used by the application. */
+
+    APP_SPI_STATES spiStateMachine;
+
+    /* SPI Driver Handle  */
+    DRV_HANDLE handleSPI0;
+
+    /* SPI Buffer Handle */
+    DRV_SPI_BUFFER_HANDLE drvSPIBufferHandle;
     DRV_HANDLE handleUSART0;
+    DRV_HANDLE handleSPI3;
 	int tx_count;
 
 } APP_DATA;
@@ -199,6 +215,8 @@ void APP_Initialize ( void );
  */
 
 void APP_Tasks( void );
+
+void delay_ms(int n);
 
 
 #endif /* _APP_H */

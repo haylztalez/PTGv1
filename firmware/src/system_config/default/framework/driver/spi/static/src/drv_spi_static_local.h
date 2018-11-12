@@ -188,10 +188,10 @@ typedef struct _DRV_SPI_SYS_QUEUE_QUEUE_MANAGER_DATA
 // *****************************************************************************
 // *****************************************************************************
 
-int32_t DRV_SPI0_PolledMasterEBM16BitTasks ( struct DRV_SPI_OBJ * dObj );
-int32_t DRV_SPI0_PolledErrorTasks(struct DRV_SPI_OBJ * dObj);
-int32_t DRV_SPI0_MasterEBMSend16BitPolled( struct DRV_SPI_OBJ * dObj );
-int32_t DRV_SPI0_MasterEBMReceive16BitPolled( struct DRV_SPI_OBJ * dObj );
+int32_t DRV_SPI0_ISRMasterEBM8BitTasks ( struct DRV_SPI_OBJ * dObj );
+int32_t DRV_SPI0_ISRErrorTasks(struct DRV_SPI_OBJ * dObj);
+int32_t DRV_SPI0_MasterEBMSend8BitISR( struct DRV_SPI_OBJ * dObj );
+int32_t DRV_SPI0_MasterEBMReceive8BitISR( struct DRV_SPI_OBJ * dObj );
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus
 }

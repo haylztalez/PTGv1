@@ -134,8 +134,8 @@ extern "C" {
 #define SYS_PORT_E_CNEN         0x0000
 
 #define SYS_PORT_F_ANSEL        0xFFFC
-#define SYS_PORT_F_TRIS         0xFFFF
-#define SYS_PORT_F_LAT          0x0000
+#define SYS_PORT_F_TRIS         0xFFFE
+#define SYS_PORT_F_LAT          0x0001
 #define SYS_PORT_F_ODC          0x0000
 #define SYS_PORT_F_CNPU         0x0000
 #define SYS_PORT_F_CNPD         0x0000
@@ -201,14 +201,14 @@ extern "C" {
 #define DRV_SPI_NUMBER_OF_MODULES		6
 /*** Driver Compilation and static configuration options. ***/
 /*** Select SPI compilation units.***/
-#define DRV_SPI_POLLED 				1
-#define DRV_SPI_ISR 				0
+#define DRV_SPI_POLLED 				0
+#define DRV_SPI_ISR 				1
 #define DRV_SPI_MASTER 				1
 #define DRV_SPI_SLAVE 				0
 #define DRV_SPI_RM 					0
 #define DRV_SPI_EBM 				1
-#define DRV_SPI_8BIT 				0
-#define DRV_SPI_16BIT 				1
+#define DRV_SPI_8BIT 				1
+#define DRV_SPI_16BIT 				0
 #define DRV_SPI_32BIT 				0
 #define DRV_SPI_DMA 				0
 
@@ -280,6 +280,11 @@ extern "C" {
 #define BAR_DAC_CS_PORT PORT_CHANNEL_A
 #define BAR_DAC_CS_PIN PORTS_BIT_POS_4
 #define BAR_DAC_CS_PIN_MASK (0x1 << 4)
+
+/*** Functions for DIS_CS pin ***/
+#define DIS_CS_PORT PORT_CHANNEL_F
+#define DIS_CS_PIN PORTS_BIT_POS_0
+#define DIS_CS_PIN_MASK (0x1 << 0)
 
 /*** Functions for BUTTON2 pin ***/
 #define BUTTON2_PORT PORT_CHANNEL_F

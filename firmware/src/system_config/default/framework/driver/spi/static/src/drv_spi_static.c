@@ -117,10 +117,10 @@ SYS_MODULE_OBJ DRV_SPI0_Initialize(void)
     PLIB_SPI_InputSamplePhaseSelect ( SPI_ID_3, SPI_INPUT_SAMPLING_PHASE_IN_MIDDLE);
 
     /* Communication Width Selection */
-    PLIB_SPI_CommunicationWidthSelect ( SPI_ID_3, SPI_COMMUNICATION_WIDTH_16BITS );
+    PLIB_SPI_CommunicationWidthSelect ( SPI_ID_3, SPI_COMMUNICATION_WIDTH_8BITS );
 
     /* Baud rate selection */
-    PLIB_SPI_BaudRateSet( SPI_ID_3 , SYS_CLK_PeripheralFrequencyGet(CLK_BUS_PERIPHERAL_3), 1000000 );
+    PLIB_SPI_BaudRateSet( SPI_ID_3 , SYS_CLK_PeripheralFrequencyGet(CLK_BUS_PERIPHERAL_3), 50000 );
 
     /* Protocol selection */
     PLIB_SPI_FramedCommunicationDisable( SPI_ID_3  );
@@ -172,6 +172,15 @@ SYS_MODULE_OBJ DRV_SPI0_Initialize(void)
     dObj->operationStarting = NULL;
     dObj->operationEnded = NULL;
 
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_TRANSMIT);
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_RECEIVE);
+    SYS_INT_SourceEnable(INT_SOURCE_SPI_3_ERROR);
+
+    /* Clear all interrupt sources */
+    SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_TRANSMIT);
+    SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_RECEIVE);
+    SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_ERROR);
+
     /* Enable the Module */
     PLIB_SPI_Enable(SPI_ID_3);
 
@@ -180,6 +189,11 @@ SYS_MODULE_OBJ DRV_SPI0_Initialize(void)
 
 void DRV_SPI0_Deinitialize ( void )
 {
+    /* Disable the interrupts */
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_TRANSMIT);
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_RECEIVE);
+    SYS_INT_SourceDisable(INT_SOURCE_SPI_3_ERROR);
+
     /* Disable the SPI Module */
     PLIB_SPI_Disable(SPI_ID_3);
 
@@ -195,7 +209,7 @@ SYS_STATUS DRV_SPI0_Status ( void )
 void DRV_SPI0_Tasks ( void )
 {
     /* Call the respective task routine */
-    DRV_SPI0_PolledMasterEBM16BitTasks(&gDrvSPI0Obj);
+    DRV_SPI0_ISRMasterEBM8BitTasks(&gDrvSPI0Obj);
 }
 
 DRV_HANDLE DRV_SPI0_Open ( const SYS_MODULE_INDEX index, const DRV_IO_INTENT intent )
@@ -247,14 +261,6 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI0_BufferAddRead2 ( void *rxBuffer, size_t size, DRV
 
     dObj = &gDrvSPI0Obj;
 
-    /* Check if the requested size of data can be processed with the configured Data Width */
-    if ((size & 0x1) != 0)
-    {
-        SYS_ASSERT(false, "\r\nSPI Driver: invalid input size, must be a multiple of 16 bits.");
-        return (DRV_SPI_BUFFER_HANDLE)NULL;
-
-    }
-
     DRV_SPI_JOB_OBJECT * pJob = NULL;
 
     if (DRV_SPI_SYS_QUEUE_AllocElementLock(dObj->queue, (void **)&pJob) != DRV_SPI_SYS_QUEUE_SUCCESS)
@@ -283,6 +289,9 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI0_BufferAddRead2 ( void *rxBuffer, size_t size, DRV
         return (DRV_SPI_BUFFER_HANDLE)NULL;
     }
 
+    dObj->txEnabled = true;
+    SYS_INT_SourceEnable(INT_SOURCE_SPI_3_TRANSMIT);
+
     return (DRV_SPI_BUFFER_HANDLE)pJob;
 }
 
@@ -292,14 +301,6 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI0_BufferAddWrite2 ( void *txBuffer, size_t size, DR
     DRV_SPI_OBJ *dObj = (DRV_SPI_OBJ*)NULL;
 
     dObj = &gDrvSPI0Obj;
-
-    /* Check if the requested size of data can be processed with the configured Data Width */
-    if ((size & 0x1) != 0)
-    {
-        SYS_ASSERT(false, "\r\nSPI Driver: invalid input size, must be a multiple of 16 bits.");
-        return (DRV_SPI_BUFFER_HANDLE)NULL;
-
-    }
 
     DRV_SPI_JOB_OBJECT * pJob = NULL;
     if (DRV_SPI_SYS_QUEUE_AllocElementLock(dObj->queue, (void **)&pJob) != DRV_SPI_SYS_QUEUE_SUCCESS)
@@ -327,6 +328,9 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI0_BufferAddWrite2 ( void *txBuffer, size_t size, DR
         return (DRV_SPI_BUFFER_HANDLE)NULL;
     }
 
+    dObj->txEnabled = true;
+    SYS_INT_SourceEnable(INT_SOURCE_SPI_3_TRANSMIT);
+
     return (DRV_SPI_BUFFER_HANDLE)pJob;
 }
 
@@ -336,14 +340,6 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI0_BufferAddWriteRead2 ( void *txBuffer, size_t txSi
     DRV_SPI_OBJ *dObj = (DRV_SPI_OBJ*)NULL;
 
     dObj = &gDrvSPI0Obj;
-
-    /* Check if the requested size of data can be processed with the configured Data Width */
-    if (((rxSize & 0x1) != 0) || ((txSize & 0x1) != 0))
-    {
-        SYS_ASSERT(false, "\r\nSPI Driver: invalid input size, must be a multiple of 16 bits.");
-        return (DRV_SPI_BUFFER_HANDLE)NULL;
-
-    }
 
     DRV_SPI_JOB_OBJECT * pJob = NULL;
     if (DRV_SPI_SYS_QUEUE_AllocElementLock(dObj->queue, (void **)&pJob) != DRV_SPI_SYS_QUEUE_SUCCESS)
@@ -358,10 +354,7 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI0_BufferAddWriteRead2 ( void *txBuffer, size_t txSi
     pJob->rxBuffer = rxBuffer;
     pJob->dataLeftToRx = rxSize;
 
-    if (jobHandle != NULL )
-    {
-        *jobHandle = (DRV_SPI_BUFFER_HANDLE)pJob;
-    }
+    (void)jobHandle;
     if (rxSize > txSize)
     {
         pJob->dummyLeftToTx = rxSize - txSize;
@@ -379,6 +372,9 @@ DRV_SPI_BUFFER_HANDLE DRV_SPI0_BufferAddWriteRead2 ( void *txBuffer, size_t txSi
         SYS_ASSERT(false, "\r\nSPI Driver: Error enqueing new job.");
         return (DRV_SPI_BUFFER_HANDLE)NULL;
     }
+
+    dObj->txEnabled = true;
+    SYS_INT_SourceEnable(INT_SOURCE_SPI_3_TRANSMIT);
 
     return (DRV_SPI_BUFFER_HANDLE)pJob;
 }
@@ -402,7 +398,8 @@ DRV_SPI_BUFFER_EVENT DRV_SPI0_BufferStatus ( DRV_SPI_BUFFER_HANDLE bufferHandle 
 }
 
 
-int32_t DRV_SPI0_PolledErrorTasks(struct DRV_SPI_OBJ * dObj)
+
+int32_t DRV_SPI0_ISRErrorTasks(struct DRV_SPI_OBJ * dObj)
 {
 
     if (dObj->currentJob == NULL)
@@ -414,27 +411,28 @@ int32_t DRV_SPI0_PolledErrorTasks(struct DRV_SPI_OBJ * dObj)
 
     if (PLIB_SPI_ReceiverHasOverflowed(SPI_ID_3))
     {
-        currentJob->status = DRV_SPI_BUFFER_EVENT_ERROR;
         if (currentJob->completeCB != NULL)
         {
             (*currentJob->completeCB)(DRV_SPI_BUFFER_EVENT_ERROR, (DRV_SPI_BUFFER_HANDLE)currentJob, currentJob->context);
         }
+        currentJob->status = DRV_SPI_BUFFER_EVENT_ERROR;
         if (dObj->operationEnded != NULL)
         {
             (*dObj->operationEnded)(DRV_SPI_BUFFER_EVENT_ERROR, (DRV_SPI_BUFFER_HANDLE)currentJob, currentJob->context);
         }
-        if (DRV_SPI_SYS_QUEUE_FreeElementLock(dObj->queue, currentJob) != DRV_SPI_SYS_QUEUE_SUCCESS)
+        if (DRV_SPI_SYS_QUEUE_FreeElement(dObj->queue, currentJob) != DRV_SPI_SYS_QUEUE_SUCCESS)
         {
             SYS_ASSERT(false, "\r\nSPI Driver: Queue free element error.");
             return 0;
         }
         dObj->currentJob = NULL;
-        PLIB_SPI_BufferClear(SPI_ID_3 );
+        PLIB_SPI_BufferClear(SPI_ID_3);
         PLIB_SPI_ReceiverOverflowClear (SPI_ID_3 );
+        SYS_INT_SourceStatusClear(INT_SOURCE_SPI_3_ERROR);
+
     }
     return 0;
 }
-
 
 // *********************************************************************************************
 // *********************************************************************************************
@@ -457,15 +455,15 @@ int32_t DRV_SPI0_BufferAddWriteRead(const void * txBuffer, void * rxBuffer, uint
     int32_t txcounter = 0;
     int32_t rxcounter = 0;
     uint8_t unitsTxed = 0;
-    const uint8_t maxUnits = 8;
+    const uint8_t maxUnits = 16;
     do {
         continueLoop = false;
         unitsTxed = 0;
         if (PLIB_SPI_TransmitBufferIsEmpty(SPI_ID_3))
         {
-            while (!PLIB_SPI_TransmitBufferIsFull(SPI_ID_3) && (txcounter < (size>>1)) && unitsTxed != maxUnits)
+            while (!PLIB_SPI_TransmitBufferIsFull(SPI_ID_3) && (txcounter < size) && unitsTxed != maxUnits)
             {
-                PLIB_SPI_BufferWrite16bit(SPI_ID_3, ((uint16_t*)txBuffer)[txcounter]);
+                PLIB_SPI_BufferWrite(SPI_ID_3, ((uint8_t*)txBuffer)[txcounter]);
                 txcounter++;
                 continueLoop = true;
                 unitsTxed++;
@@ -475,7 +473,7 @@ int32_t DRV_SPI0_BufferAddWriteRead(const void * txBuffer, void * rxBuffer, uint
         while (txcounter != rxcounter)
         {
             while (PLIB_SPI_ReceiverFIFOIsEmpty(SPI_ID_3));
-            ((uint16_t*)rxBuffer)[rxcounter] = PLIB_SPI_BufferRead16bit(SPI_ID_3);
+            ((uint8_t*)rxBuffer)[rxcounter] = PLIB_SPI_BufferRead(SPI_ID_3);
             rxcounter++;
             continueLoop = true;
         }
@@ -484,6 +482,6 @@ int32_t DRV_SPI0_BufferAddWriteRead(const void * txBuffer, void * rxBuffer, uint
             continueLoop = true;
         }
     }while(continueLoop);
-    return txcounter<<1;
+    return txcounter;
 }
 
