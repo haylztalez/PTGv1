@@ -168,7 +168,7 @@
       <Template dnOrder="1">
         <Name dnOrder="0">drv_spi_static_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
-        <Checksum dnOrder="2">CF33218565DEA80A04729EF1F04D7679</Checksum>
+        <Checksum dnOrder="2">0CCE79463B60165F12DEA2DEDB06D5B9</Checksum>
         <ProjectFileChecksum dnOrder="3">6051AFFBD84444BB5A7EDE54335D7761</ProjectFileChecksum>
       </Template>
       <Template dnOrder="2">
@@ -210,7 +210,7 @@
       <Template dnOrder="8">
         <Name dnOrder="0">drv_spi_static_local.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
-        <Checksum dnOrder="2">5810E0FF8C70586079140C4A57762B18</Checksum>
+        <Checksum dnOrder="2">B3E388D321AEC4F0B0FC12196172160E</Checksum>
         <ProjectFileChecksum dnOrder="3">792F1533B491AD4E39DD09B57B6EFDA3</ProjectFileChecksum>
       </Template>
       <Template dnOrder="9">
@@ -222,7 +222,7 @@
       <Template dnOrder="10">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">C644A74D7B5C3F78DE3325C1E26CAA73</Checksum>
+        <Checksum dnOrder="2">A58F4D35BDF6DC3FA80D4286248A67CA</Checksum>
         <ProjectFileChecksum dnOrder="3">F64381DED573293AC497CF1FDD37B5D7</ProjectFileChecksum>
       </Template>
       <Template dnOrder="11">
@@ -234,13 +234,13 @@
       <Template dnOrder="12">
         <Name dnOrder="0">drv_spi_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
-        <Checksum dnOrder="2">809E9C84FEBFA8FF60AC04F375EED2C9</Checksum>
+        <Checksum dnOrder="2">35AF501BD360C87F90FD0EDBFCBED8C8</Checksum>
         <ProjectFileChecksum dnOrder="3">15302CF74334BD3E879D84BF5DCB3297</ProjectFileChecksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">system_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">A736D15C29C51FD34020F4FC674A06C7</Checksum>
+        <Checksum dnOrder="2">2C4CD5A3F55D5308E880FA0D79936DCF</Checksum>
         <ProjectFileChecksum dnOrder="3">4219D8831AC6F1AA217FE695D13CE292</ProjectFileChecksum>
       </Template>
       <Template dnOrder="14">
@@ -264,7 +264,7 @@
       <Template dnOrder="17">
         <Name dnOrder="0">drv_spi_mapping.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
-        <Checksum dnOrder="2">1074F67858C7290920B17FBFA04C10DC</Checksum>
+        <Checksum dnOrder="2">C10B515B3A6006C3E29B4837F46B356B</Checksum>
         <ProjectFileChecksum dnOrder="3">D66E2FE83763A1FE8D4F0D5051852A6B</ProjectFileChecksum>
       </Template>
       <Template dnOrder="18">
@@ -276,13 +276,13 @@
       <Template dnOrder="19">
         <Name dnOrder="0">drv_spi_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/spi/static</Path>
-        <Checksum dnOrder="2">A5F11D81D1C577E89060E519EE15E35F</Checksum>
+        <Checksum dnOrder="2">029583174421016FE085183303C9FBB7</Checksum>
         <ProjectFileChecksum dnOrder="3">B2DF7431F9D53ECAF6EC0A6482ED33F8</ProjectFileChecksum>
       </Template>
       <Template dnOrder="20">
         <Name dnOrder="0">drv_spi_static_ebm_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
-        <Checksum dnOrder="2">CC4D37F2E8FDD9BC24A452E035A32FFC</Checksum>
+        <Checksum dnOrder="2">F78220E4D25A7F066C100A881B8E9A73</Checksum>
         <ProjectFileChecksum dnOrder="3">14A752F7594A1240D481903171AB1B0C</ProjectFileChecksum>
       </Template>
       <Template dnOrder="21">
@@ -300,7 +300,7 @@
       <Template dnOrder="23">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">7191DF020CC3B3385F888FFC1FAFC8CC</Checksum>
+        <Checksum dnOrder="2">A33BF88190DFC283729D1C33AA354851</Checksum>
         <ProjectFileChecksum dnOrder="3">6986FCF2489827C94944045B00716A6A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="24">

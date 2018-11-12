@@ -130,7 +130,7 @@ typedef struct
     /* SPI Buffer Handle */
     DRV_SPI_BUFFER_HANDLE drvSPIBufferHandle;
     DRV_HANDLE handleUSART0;
-    DRV_HANDLE handleSPI3;
+    DRV_HANDLE handleSPI1;
 	int tx_count;
 
 } APP_DATA;

@@ -208,13 +208,13 @@ extern "C" {
 #define DRV_SPI_RM 					0
 #define DRV_SPI_EBM 				1
 #define DRV_SPI_8BIT 				1
-#define DRV_SPI_16BIT 				0
+#define DRV_SPI_16BIT 				1
 #define DRV_SPI_32BIT 				0
 #define DRV_SPI_DMA 				0
 
 /*** SPI Driver Static Allocation Options ***/
-#define DRV_SPI_INSTANCES_NUMBER 		1
-#define DRV_SPI_CLIENTS_NUMBER 			1
+#define DRV_SPI_INSTANCES_NUMBER 		2
+#define DRV_SPI_CLIENTS_NUMBER 			2
 #define DRV_SPI_ELEMENTS_PER_QUEUE 		10
 // *****************************************************************************
 /* USART Driver Configuration Options
