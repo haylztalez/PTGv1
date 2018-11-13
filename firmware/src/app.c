@@ -85,6 +85,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 /* defining LEDS using LAT register */
 #define LED1 LATEbits.LATE15
+#define LED2 LATEbits.LATE14
 
 /* defining BUTTONS using PORT registers */
 #define BUTTON1 PORTBbits.RB10
@@ -96,6 +97,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #define SS3_TRIGGER LATFbits.LATF0
 #define SS2_TRIGGER LATAbits.LATA4
 
+
+#define BUFFER_SIZE 32
 
 /* delay function, used as delay_ms(100) to delay 100 ms */
 void delay_ms(int n){
@@ -153,6 +156,41 @@ void write_DAC(unsigned char d)
     SS2_TRIGGER = 1;
     
 }
+DRV_I2S_BUFFER_HANDLE bufferHandle1;
+DRV_I2S_BUFFER_HANDLE bufferHandle2;
+
+char buffer1[BUFFER_SIZE*8];
+char buffer2[BUFFER_SIZE*8];
+
+//DCH0SSA = KVA_TO_PA(&buffer1[0]);
+//DCH1SSA = KVA_TO_PA(&buffer2[0]);
+
+void APP_MyBufferEventHandler( DRV_I2S_BUFFER_EVENT event, DRV_I2S_BUFFER_HANDLE bufferHandle, uintptr_t context )
+{
+    LED2_ON();
+    switch(event)
+    {
+        case DRV_I2S_BUFFER_EVENT_COMPLETE:
+            if(bufferHandle == bufferHandle1)
+            {
+                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE*8);
+            }
+            else if(bufferHandle == bufferHandle2)
+            {
+                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE*8);
+            }
+            // Handle the completed buffer.
+            break;
+
+        case DRV_I2S_BUFFER_EVENT_ERROR:
+        default:
+
+            // Handle error.
+            break;
+    }
+}
+
+
 
 // *****************************************************************************
 // *****************************************************************************
@@ -295,13 +333,14 @@ void APP_Initialize ( void )
 
 void APP_Tasks ( void )
 {
-
+    //YES printf("are you getting here?\n");
     /* Check the application's current state. */
     switch ( appData.state )
     {
         /* Application's initial state. */
         case APP_STATE_INIT:
         {
+            //NO printf("are you getting here?\n");
             bool appInitialized = true;
        
 
@@ -317,6 +356,24 @@ void APP_Tasks ( void )
                 appInitialized &= (DRV_HANDLE_INVALID != appData.handleSPI1);
             }
             
+            if (appData.handleI2S0 == DRV_HANDLE_INVALID )
+            {
+                appData.handleI2S0 = DRV_I2S_Open(0, DRV_IO_INTENT_READWRITE);
+                if(DRV_HANDLE_INVALID != appData.handleI2S0)
+                {
+               
+                    DRV_I2S_BufferEventHandlerSet(appData.handleI2S0, &APP_MyBufferEventHandler, 0);
+                    DRV_I2S_ReceiveErrorIgnore(appData.handleI2S0,true);
+                    DRV_I2S_TransmitErrorIgnore(appData.handleI2S0,true);
+                    memset(buffer1,0,BUFFER_SIZE*8);
+                    memset(buffer2,0xFF,BUFFER_SIZE*8);
+                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE*8);
+                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE*8);
+                    
+                }
+                appInitialized &= (DRV_HANDLE_INVALID != appData.handleI2S0);
+            }
+
             if (appData.handleUSART0 == DRV_HANDLE_INVALID)
             {
                 appData.handleUSART0 = DRV_USART_Open(APP_DRV_USART, DRV_IO_INTENT_READWRITE|DRV_IO_INTENT_NONBLOCKING);
@@ -345,16 +402,20 @@ void APP_Tasks ( void )
         {
             /* run the state machine for servicing the SPI */
             //SPI_Task();
-			
-            printf("I made it");
+            
             delay_ms(100);
             
             tx_packet[0] = 'H';
+            tx_packet[1] = 'E';
+            tx_packet[2] = 'L';
+            tx_packet[3] = 'L';
+            tx_packet[4] = 'O';
 			//USART_Task(); - original harmony code, unsure if still needed
             if(!BUTTON1)
             {
-                send_packet(1);
+                send_packet(5);
             }
+            
             
             
 //            dac_packet[0] = 0b00010000;
@@ -374,25 +435,30 @@ void APP_Tasks ( void )
             dac_packet[1] = 255 - (uint8_t)(9.5f/.5f);
             dac_packet[2] = 17;
             dac_packet[3] = 255 - (uint8_t)(9.5f/.5f);
+            
             write_DAC(4);
             
             printf("%d\n",dac_packet[1]);
-          
-                
             
-            if(appData.spiStateMachine == APP_SPI_STATE_START)
-            {
-                printf("start\n");
-            }
-            else if (appData.spiStateMachine == APP_SPI_STATE_WAIT)
-            {
-                printf("wait\n");
-            }
-            else 
-            {
-                 printf("done\n");
-                 //appData.spiStateMachine = APP_SPI_STATE_START;
-            }
+        
+          
+            
+
+                
+//            
+//            if(appData.spiStateMachine == APP_SPI_STATE_START)
+//            {
+//                printf("start\n");
+//            }
+//            else if (appData.spiStateMachine == APP_SPI_STATE_WAIT)
+//            {
+//                printf("wait\n");
+//            }
+//            else 
+//            {
+//                 printf("done\n");
+//                 //appData.spiStateMachine = APP_SPI_STATE_START;
+//            }
                
             
             //printf("Hi\n");

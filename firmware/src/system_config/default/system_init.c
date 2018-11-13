@@ -142,12 +142,13 @@ const DRV_I2S_INIT drvI2S0InitData =
     .audioTransmitMode = SPI_AUDIO_TRANSMIT_MODE_IDX0,
     .inputSamplePhase = SPI_INPUT_SAMPLING_PHASE_IDX0,
     .protocolMode = DRV_I2S_AUDIO_PROTOCOL_MODE_IDX0,
-    .txInterruptSource = DRV_I2S_TX_INT_SRC_IDX0,
-    .rxInterruptSource = DRV_I2S_RX_INT_SRC_IDX0,
-    .errorInterruptSource = DRV_I2S_ERR_INT_SRC_IDX0,
     .queueSizeTransmit = QUEUE_SIZE_TX_IDX0,
     .queueSizeReceive = QUEUE_SIZE_RX_IDX0,
-    .dmaChannelTransmit = DMA_CHANNEL_NONE,
+    .dmaChannelTransmit = DRV_I2S_TX_DMA_CHANNEL_IDX0,
+    .dmaChaningChannelTransmit = DRV_I2S_TX_DMA_CHAINING_CHANNEL_IDX0,
+    .txInterruptSource = DRV_I2S_TX_INT_SRC_IDX0,    
+    .dmaInterruptTransmitSource = DRV_I2S_TX_DMA_SOURCE_IDX0,    
+    .dmaInterruptChainingTransmitSource = DRV_I2S_TX_DMA_CHAINING_SOURCE_IDX0,
     .dmaChannelReceive = DMA_CHANNEL_NONE,
 };
 
@@ -177,6 +178,27 @@ SYSTEM_OBJECTS sysObj;
 // *****************************************************************************
 // *****************************************************************************
 
+//<editor-fold defaultstate="collapsed" desc="SYS_DEVCON Initialization Data">
+/*******************************************************************************
+  Device Control System Service Initialization Data
+*/
+
+const SYS_DEVCON_INIT sysDevconInit =
+{
+    .moduleInit = {0},
+};
+
+// </editor-fold>
+//<editor-fold defaultstate="collapsed" desc="SYS_DMA Initialization Data">
+/*** System DMA Initialization Data ***/
+
+const SYS_DMA_INIT sysDmaInit =
+{
+	.sidl = SYS_DMA_SIDL_DISABLE,
+
+};
+// </editor-fold>
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Library/Stack Initialization Data
@@ -204,7 +226,7 @@ void SYS_Initialize ( void* data )
 {
     /* Core Processor Initialization */
     SYS_CLK_Initialize( NULL );
-    SYS_DEVCON_Initialize(SYS_DEVCON_INDEX_0, (SYS_MODULE_INIT*)NULL);
+    sysObj.sysDevcon = SYS_DEVCON_Initialize(SYS_DEVCON_INDEX_0, (SYS_MODULE_INIT*)&sysDevconInit);
     SYS_DEVCON_PerformanceConfig(SYS_CLK_SystemFrequencyGet());
     SYS_PORTS_Initialize();
 
@@ -212,13 +234,23 @@ void SYS_Initialize ( void* data )
     sysObj.drvI2S0 = DRV_I2S_Initialize(DRV_I2S_INDEX_0, (SYS_MODULE_INIT *)&drvI2S0InitData);
 
 
+    sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA1, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA1, INT_SUBPRIORITY_LEVEL0);
+
+    SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
+    SYS_INT_SourceEnable(INT_SOURCE_DMA_1);
+
+
 
     /*** SPI Driver Index 0 initialization***/
 
-    SYS_INT_VectorPrioritySet(INT_VECTOR_SPI3_TX, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_SPI3_TX, INT_SUBPRIORITY_LEVEL0);
-    SYS_INT_VectorPrioritySet(INT_VECTOR_SPI3_RX, INT_PRIORITY_LEVEL1);
-    SYS_INT_VectorSubprioritySet(INT_VECTOR_SPI3_RX, INT_SUBPRIORITY_LEVEL0);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_SPI3_TX, INT_PRIORITY_LEVEL2);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_SPI3_TX, INT_SUBPRIORITY_LEVEL1);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_SPI3_RX, INT_PRIORITY_LEVEL7);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_SPI3_RX, INT_SUBPRIORITY_LEVEL3);
     SYS_INT_VectorPrioritySet(INT_VECTOR_SPI3_FAULT, INT_PRIORITY_LEVEL1);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_SPI3_FAULT, INT_SUBPRIORITY_LEVEL0);
     sysObj.spiObjectIdx0 = DRV_SPI_Initialize(DRV_SPI_INDEX_0, (const SYS_MODULE_INIT  * const)NULL);

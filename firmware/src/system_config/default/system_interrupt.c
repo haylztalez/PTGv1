@@ -81,6 +81,7 @@ void __ISR(_UART1_FAULT_VECTOR, ipl1AUTO) _IntHandlerDrvUsartErrorInstance0(void
 {
     DRV_USART_TasksError(sysObj.drvUsart0);
 }
+
  
  
 
@@ -94,7 +95,19 @@ void __ISR(_UART1_FAULT_VECTOR, ipl1AUTO) _IntHandlerDrvUsartErrorInstance0(void
 
  
  
+void __ISR(_DMA0_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh0(void)
+{   
+    SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_0);
+}
+
+void __ISR(_DMA1_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh1(void)
+{          
+    SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_1);
+}
  
+
+ 
+
 /*******************************************************************************
  End of File
 */

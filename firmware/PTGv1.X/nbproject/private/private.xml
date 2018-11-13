@@ -3,8 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/app.c</file>
+            <file>file:/Users/hayleyboynton/microchip/harmony/v2_05_01/framework/driver/spi/drv_spi.h</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/system_config/default/framework/driver/spi/static/drv_spi_static.h</file>
+            <file>file:/Users/hayleyboynton/microchip/harmony/v2_05_01/framework/driver/spi/drv_spi_definitions.h</file>
+            <file>file:/Users/hayleyboynton/microchip/harmony/v2_05_01/framework/system/common/sys_module.h</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/system_config/default/system_tasks.c</file>
+            <file>file:/Users/hayleyboynton/microchip/harmony/v2_05_01/framework/driver/driver_common.h</file>
             <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/main.c</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/system_config/default/system_interrupt.c</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/system_config/default/system_exceptions.c</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/system_config/default/system_definitions.h</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/app.h</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/system_config/default/framework/driver/spi/static/src/drv_spi_mapping.c</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/system_config/default/framework/driver/spi/static/src/drv_spi_static.c</file>
+            <file>file:/Users/hayleyboynton/Desktop/Fall%202018/Senior%20Design/Code/PTGv1/firmware/src/app.c</file>
         </group>
     </open-files>
 </project-private>

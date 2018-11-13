@@ -55,10 +55,14 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
+#include <xc.h>
 #include <stddef.h>                     // Defines NULL
 #include <stdbool.h>                    // Defines true
 #include <stdlib.h>                     // Defines EXIT_FAILURE
 #include "system/common/sys_module.h"   // SYS function prototypes
+#include "sys/kmem.h"                   // KVA_TO_PA macro
+#include "app.h"
+//#include "wavetable.h"
 
 
 // *****************************************************************************
@@ -72,20 +76,19 @@ int main ( void )
     /* Initialize all MPLAB Harmony modules, including application(s). */
     SYS_Initialize ( NULL );
     delay_ms(100);
-    
 
     while ( true )
     {
-        /* Maintain state machines of all polled MPLAB Harmony modules. */
+       /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
-
+ 
     }
+
 
     /* Execution should not come here during normal operation */
 
     return ( EXIT_FAILURE );
 }
-
 
 /*******************************************************************************
  End of File
