@@ -108,6 +108,11 @@ void __ISR(_DMA1_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh1(void)
 
  
 
+void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
+{
+    DRV_TMR_Tasks(sysObj.drvTmr0);
+}
+ 
 /*******************************************************************************
  End of File
 */

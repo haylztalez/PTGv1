@@ -75,7 +75,7 @@ int main ( void )
 {
     /* Initialize all MPLAB Harmony modules, including application(s). */
     SYS_Initialize ( NULL );
-    delay_ms(100);
+    //delay_ms(100);
 
     while ( true )
     {

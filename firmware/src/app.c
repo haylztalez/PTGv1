@@ -101,16 +101,28 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #define BUFFER_SIZE 32
 
 /* delay function, used as delay_ms(100) to delay 100 ms */
-void delay_ms(int n){
-    float k,l;
-    k = 3.73254;
-    l = 17.234;
-	int i;
-	int j;
-	for (i=0;i<n;i++)
-		for (j=0;j<48193;j++)
-		{k = k*l;}
+//void delay_ms(int n){
+//    float k,l;
+//    k = 3.73254;
+//    l = 17.234;
+//	int i;
+//	int j;
+//	for (i=0;i<n;i++)
+//		for (j=0;j<48193;j++)
+//		{k = k*l;}
+//}
+
+void delay_ms(unsigned int count)
+{
+	T1CON = 0x8030;		// turn on timer, prescaler to 256 (type B timer)
+	while(count--)
+	{
+		TMR1 = 0;
+		while(TMR1 < 0x4e);
+	}
+	T1CONbits.ON = 0;
 }
+
 
 
 APP_DATA appData;
@@ -403,7 +415,7 @@ void APP_Tasks ( void )
             /* run the state machine for servicing the SPI */
             //SPI_Task();
             
-            delay_ms(100);
+            //delay_ms(100);
             
             tx_packet[0] = 'H';
             tx_packet[1] = 'E';

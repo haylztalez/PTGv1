@@ -73,7 +73,9 @@ void SYS_Tasks ( void )
 {
     /*ADDING THESE BREAKS THE CODE*/
     /* Maintain system services */
-    //SYS_DEVCON_Tasks(sysObj.sysDevcon);
+    /* SYS_TMR Device layer tasks routine */ 
+    SYS_TMR_Tasks(sysObj.sysTmr);
+
     /* Maintain Device Drivers */
     //DRV_I2S_Tasks(sysObj.drvI2S0);
     //DRV_I2S_TasksError(sysObj.drvI2S0);

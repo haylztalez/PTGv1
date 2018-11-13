@@ -53,6 +53,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/clk/sys_clk.h"
 #include "system/int/sys_int.h"
 #include "system/dma/sys_dma.h"
+#include "system/tmr/sys_tmr.h"
+#include "driver/tmr/drv_tmr.h"
 #include "driver/i2s/drv_i2s.h"
 #include "driver/usart/drv_usart_static.h"
 #include "system/ports/sys_ports.h"
@@ -92,14 +94,16 @@ extern "C" {
 typedef struct
 {
     SYS_MODULE_OBJ  sysDevcon;
+    SYS_MODULE_OBJ  sysTmr;
     SYS_MODULE_OBJ  sysDma;
+    SYS_MODULE_OBJ  drvTmr0;
     SYS_MODULE_OBJ  drvI2S0;
 
     SYS_MODULE_OBJ  drvUsart0;
 
     /*** SPI Object for Index 0 ***/
     SYS_MODULE_OBJ				spiObjectIdx0;
-
+    
     /*** SPI Object for Index 1 ***/
     SYS_MODULE_OBJ				spiObjectIdx1;
 

@@ -160,6 +160,20 @@ const DRV_I2S_INIT drvI2S0InitData =
 // <editor-fold defaultstate="collapsed" desc="DRV_SPI Initialization Data"> 
  /*** SPI Driver Initialization Data ***/
 // </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="DRV_Timer Initialization Data">
+/*** TMR Driver Initialization Data ***/
+
+const DRV_TMR_INIT drvTmr0InitData =
+{
+    .moduleInit.sys.powerState = DRV_TMR_POWER_STATE_IDX0,
+    .tmrId = DRV_TMR_PERIPHERAL_ID_IDX0,
+    .clockSource = DRV_TMR_CLOCK_SOURCE_IDX0,
+    .prescale = DRV_TMR_PRESCALE_IDX0,
+    .mode = DRV_TMR_OPERATION_MODE_IDX0,
+    .interruptSource = DRV_TMR_INTERRUPT_SOURCE_IDX0,
+    .asyncWriteEnable = false,
+};
+// </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="DRV_USART Initialization Data">
 // </editor-fold>
 
@@ -196,6 +210,15 @@ const SYS_DMA_INIT sysDmaInit =
 {
 	.sidl = SYS_DMA_SIDL_DISABLE,
 
+};
+// </editor-fold>
+// <editor-fold defaultstate="collapsed" desc="SYS_TMR Initialization Data">
+/*** TMR Service Initialization Data ***/
+const SYS_TMR_INIT sysTmrInitData =
+{
+    .moduleInit = {SYS_MODULE_POWER_RUN_FULL},
+    .drvIndex = DRV_TMR_INDEX_0,
+    .tmrFreq = 1000, 
 };
 // </editor-fold>
 
@@ -264,8 +287,14 @@ void SYS_Initialize ( void* data )
     SYS_INT_VectorPrioritySet(INT_VECTOR_SPI2_FAULT, INT_PRIORITY_LEVEL1);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_SPI2_FAULT, INT_SUBPRIORITY_LEVEL0);
     sysObj.spiObjectIdx1 = DRV_SPI_Initialize(DRV_SPI_INDEX_1, (const SYS_MODULE_INIT  * const)NULL);
-    
-    sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
+
+    sysObj.drvTmr0 = DRV_TMR_Initialize(DRV_TMR_INDEX_0, (SYS_MODULE_INIT *)&drvTmr0InitData);
+
+    SYS_INT_VectorPrioritySet(INT_VECTOR_T1, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_T1, INT_SUBPRIORITY_LEVEL0);
+ 
+ 
+     sysObj.drvUsart0 = DRV_USART_Initialize(DRV_USART_INDEX_0, (SYS_MODULE_INIT *)NULL);
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART1_TX, INT_PRIORITY_LEVEL1);
     SYS_INT_VectorSubprioritySet(INT_VECTOR_UART1_TX, INT_SUBPRIORITY_LEVEL0);
     SYS_INT_VectorPrioritySet(INT_VECTOR_UART1_RX, INT_PRIORITY_LEVEL1);
@@ -277,6 +306,9 @@ void SYS_Initialize ( void* data )
 
     /*** Interrupt Service Initialization Code ***/
     SYS_INT_Initialize();
+
+    /*** TMR Service Initialization Code ***/
+    sysObj.sysTmr  = SYS_TMR_Initialize(SYS_TMR_INDEX_0, (const SYS_MODULE_INIT  * const)&sysTmrInitData);
 
     /* Initialize Middleware */
 

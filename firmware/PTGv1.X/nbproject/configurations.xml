@@ -55,7 +55,17 @@
             <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/spi/drv_spi.h</itemPath>
             <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/spi/drv_spi_definitions.h</itemPath>
           </logicalFolder>
-          <logicalFolder name="f3" displayName="usart" projectFiles="true">
+          <logicalFolder name="f3" displayName="tmr" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
+              <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/tmr/src/drv_tmr_local.h</itemPath>
+            </logicalFolder>
+            <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/tmr/drv_tmr.h</itemPath>
+            <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/tmr/drv_tmr_mapping.h</itemPath>
+            <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
+            <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f4" displayName="usart" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/usart/src/drv_usart_variant_mapping.h</itemPath>
             </logicalFolder>
@@ -108,6 +118,12 @@
           <logicalFolder name="f6" displayName="ports" projectFiles="true">
             <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/system/ports/sys_ports.h</itemPath>
             <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/system/ports/sys_ports_definitions.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f8" displayName="tmr" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/system/tmr/src/sys_tmr_local.h</itemPath>
+            </logicalFolder>
+            <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/system/tmr/sys_tmr.h</itemPath>
           </logicalFolder>
           <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/system/system.h</itemPath>
         </logicalFolder>
@@ -175,6 +191,13 @@
               </logicalFolder>
             </logicalFolder>
           </logicalFolder>
+          <logicalFolder name="f2" displayName="tmr" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <logicalFolder name="f1" displayName="dynamic" projectFiles="true">
+                <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/driver/tmr/src/dynamic/drv_tmr.c</itemPath>
+              </logicalFolder>
+            </logicalFolder>
+          </logicalFolder>
         </logicalFolder>
         <logicalFolder name="f2" displayName="system" projectFiles="true">
           <logicalFolder name="f1" displayName="devcon" projectFiles="true">
@@ -189,6 +212,11 @@
           <logicalFolder name="f3" displayName="int" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/system/int/src/sys_int_pic32.c</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="f4" displayName="tmr" projectFiles="true">
+            <logicalFolder name="f1" displayName="src" projectFiles="true">
+              <itemPath>../../../../../../../microchip/harmony/v2_05_01/framework/system/tmr/src/sys_tmr.c</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
