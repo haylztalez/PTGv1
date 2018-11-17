@@ -126,7 +126,7 @@ void delay_ms(unsigned int count)
 
 
 APP_DATA appData;
-static uint8_t __attribute__ ((aligned (16))) app_spi_tx_buffer[] = {'H'};
+static uint8_t __attribute__ ((aligned (16))) app_spi_tx_buffer[] = {};
 
 static uint8_t __attribute__ ((aligned (16))) app_spi_rx_buffer[sizeof(app_spi_tx_buffer)];
 
@@ -168,6 +168,7 @@ void write_DAC(unsigned char d)
     SS2_TRIGGER = 1;
     
 }
+
 DRV_I2S_BUFFER_HANDLE bufferHandle1;
 DRV_I2S_BUFFER_HANDLE bufferHandle2;
 
@@ -177,56 +178,56 @@ char buffer2[BUFFER_SIZE];
 //DCH0SSA = KVA_TO_PA(&buffer1[0]);
 //DCH1SSA = KVA_TO_PA(&buffer2[0]);
 
-short buffer_a[BUFFER_SIZE];
-short buffer_b[BUFFER_SIZE];
-short* buffer_pp;            // buffer_pp = buffer play pointer.
+//short buffer_a[BUFFER_SIZE];
+//short buffer_b[BUFFER_SIZE];
+//short* buffer_pp;            // buffer_pp = buffer play pointer.
+//
+//extern unsigned char isFillFlag;
+//extern volatile unsigned char bufferAFull;
+//extern volatile unsigned char bufferBFull;
+//
+//// test variables - for debugging purposes only!
+//unsigned long accum1t = 0;
+//unsigned long accum2t = 0;
+//unsigned long tuningWord1t = 90;
+//unsigned long tuningWord2t = 90;
 
-extern unsigned char isFillFlag;
-extern volatile unsigned char bufferAFull;
-extern volatile unsigned char bufferBFull;
-
-// test variables - for debugging purposes only!
-unsigned long accum1t = 0;
-unsigned long accum2t = 0;
-unsigned long tuningWord1t = 90;
-unsigned long tuningWord2t = 90;
-
-void generate_sine() {
-    
-  //source: https://github.com/pyrohaz
-  unsigned int n = 0;
-  short int sample = 0;
-  for (n = 0; n < BUFFER_SIZE; n++) {
-    
-    if (n & 0x01) {
-      //sample = (short int)wavetable[accum1t >> 20];
-      sample = 0;
-      accum1t += tuningWord1t;
-    }
-    else {
-      sample = (short int)wavetable[accum2t >> 20];
-      accum2t += tuningWord2t;
-    }
-
-    buffer_pp[n] = sample;
-
-  }
-    
-}
+//void generate_sine() {
+//    
+//  //source: https://github.com/pyrohaz
+//  unsigned int n = 0;
+//  short int sample = 0;
+//  for (n = 0; n < BUFFER_SIZE; n++) {
+//    
+//    if (n & 0x01) {
+//      //sample = (short int)wavetable[accum1t >> 20];
+//      sample = 0;
+//      accum1t += tuningWord1t;
+//    }
+//    else {
+//      sample = (short int)wavetable[accum2t >> 20];
+//      accum2t += tuningWord2t;
+//    }
+//
+//    buffer_pp[n] = sample;
+//
+//  }
+//    
+//}
 
 void APP_MyBufferEventHandler( DRV_I2S_BUFFER_EVENT event, DRV_I2S_BUFFER_HANDLE bufferHandle, uintptr_t context )
 {
-    LED2_ON();
+    printf("here");
     switch(event)
     {
         case DRV_I2S_BUFFER_EVENT_COMPLETE:
             if(bufferHandle == bufferHandle1)
             {
-                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE*8);
+                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE);
             }
             else if(bufferHandle == bufferHandle2)
             {
-                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE*8);
+                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE);
             }
             // Handle the completed buffer.
             break;
@@ -407,6 +408,7 @@ void APP_Tasks ( void )
             if (appData.handleI2S0 == DRV_HANDLE_INVALID )
             {
                 appData.handleI2S0 = DRV_I2S_Open(0, DRV_IO_INTENT_READWRITE);
+                printf("HERE");
                 if(DRV_HANDLE_INVALID != appData.handleI2S0)
                 {
                
@@ -416,7 +418,7 @@ void APP_Tasks ( void )
                     memset(buffer1,0,BUFFER_SIZE);
                     memset(buffer2,0xFF,BUFFER_SIZE);
                     DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE);
-                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE);
+                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer1,BUFFER_SIZE);
                     
                 }
                 appInitialized &= (DRV_HANDLE_INVALID != appData.handleI2S0);
@@ -449,13 +451,8 @@ void APP_Tasks ( void )
         case APP_STATE_SERVICE_TASKS:
         {
             /* run the state machine for servicing the SPI */
-            //SPI_Task();
             
             //delay_ms(100);
-            
-
-            
-            
             
 //            dac_packet[0] = 0b00010000;
 //            dac_packet[1] = 0b11101100;
@@ -477,60 +474,53 @@ void APP_Tasks ( void )
             
             write_DAC(4);
             
-            tx_packet[0] = 'H';
-            tx_packet[1] = 'E';
-            tx_packet[2] = 'L';
-            tx_packet[3] = 'L';
-            tx_packet[4] = 'O';
+            tx_packet[0] = 'T';
+            tx_packet[1] = 'H';
+            tx_packet[2] = 'I';
+            tx_packet[3] = 'S';
+            tx_packet[4] = ' ';
+            tx_packet[5] = 'I';
+            tx_packet[6] = 'S';
+            tx_packet[7] = ' ';
+            tx_packet[8] = 'H';
+            tx_packet[9] = 'A';
+            tx_packet[10] = 'R';
+            tx_packet[11] = 'D';
+            tx_packet[12] = ':';
+            tx_packet[13] = '(';
+
+            
+            
             
             if(!BUTTON1)
             {
                 if(!LCDFlag)
                 {
                     LCDFlag = true;
-                    send_packet(5);
+                    send_packet(14);
+                    tx_packet[0] = 0xFE;
+                    tx_packet[1] = 0x45;
+                    tx_packet[2] = 0x40;
+                    send_packet(3);
+                    tx_packet[0] = 'P';
+                    tx_packet[1] = 'L';
+                    tx_packet[2] = 'Z';
+                    tx_packet[3] = ' ';
+                    tx_packet[4] = 'H';
+                    tx_packet[5] = 'E';
+                    tx_packet[6] = 'L';
+                    tx_packet[7] = 'P';
+                    send_packet(8);
                 }
             }
             
-            //printf("%d\n",dac_packet[1]);
-            
-            
-        
-          
+            printf("%d\n",dac_packet[1]);
             
 
-                
-//            
-//            if(appData.spiStateMachine == APP_SPI_STATE_START)
-//            {
-//                printf("start\n");
-//            }
-//            else if (appData.spiStateMachine == APP_SPI_STATE_WAIT)
-//            {
-//                printf("wait\n");
-//            }
-//            else 
-//            {
-//                 printf("done\n");
-//                 //appData.spiStateMachine = APP_SPI_STATE_START;
-//            }
-               
-            
-            //printf("Hi\n");
-            
             LED1 = !BUTTON2;
             
-//            if(!BUTTON2)  // I think this means if button 1 is pressed
-//            {
-//                LED2_ON();
-//                               
-//            }
-//            else
-//            {
-//                LED2_OFF();
-//                //LED1_OFF();
-//            }
-         //DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer_pp,BUFFER_SIZE);
+            
+//            
 //        if (bufferAFull == 0) {
 //            //printf("I am here\n");
 //            buffer_pp = &buffer_a[0];

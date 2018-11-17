@@ -77,6 +77,8 @@ int main ( void )
     SYS_Initialize ( NULL );
     //delay_ms(100);
     LCDFlag = false;
+    
+    IFS1bits.SPI1TXIF = 1;
 
     while ( true )
     {
