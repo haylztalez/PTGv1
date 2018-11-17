@@ -93,12 +93,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #define BUTTON3 PORTBbits.RB12
 #define BUTTON4 PORTBbits.RB11
 
-
+/* defining Slave Select ports  */
 #define SS3_TRIGGER LATFbits.LATF0
 #define SS2_TRIGGER LATAbits.LATA4
 
-
-#define BUFFER_SIZE 32
+/* defining DDS stuff */
+#define BUFFER_SIZE 32*8 //
 
 /* delay function, used as delay_ms(100) to delay 100 ms */
 //void delay_ms(int n){
@@ -171,11 +171,48 @@ void write_DAC(unsigned char d)
 DRV_I2S_BUFFER_HANDLE bufferHandle1;
 DRV_I2S_BUFFER_HANDLE bufferHandle2;
 
-char buffer1[BUFFER_SIZE*8];
-char buffer2[BUFFER_SIZE*8];
+char buffer1[BUFFER_SIZE];
+char buffer2[BUFFER_SIZE];
 
 //DCH0SSA = KVA_TO_PA(&buffer1[0]);
 //DCH1SSA = KVA_TO_PA(&buffer2[0]);
+
+short buffer_a[BUFFER_SIZE];
+short buffer_b[BUFFER_SIZE];
+short* buffer_pp;            // buffer_pp = buffer play pointer.
+
+extern unsigned char isFillFlag;
+extern volatile unsigned char bufferAFull;
+extern volatile unsigned char bufferBFull;
+
+// test variables - for debugging purposes only!
+unsigned long accum1t = 0;
+unsigned long accum2t = 0;
+unsigned long tuningWord1t = 90;
+unsigned long tuningWord2t = 90;
+
+void generate_sine() {
+    
+  //source: https://github.com/pyrohaz
+  unsigned int n = 0;
+  short int sample = 0;
+  for (n = 0; n < BUFFER_SIZE; n++) {
+    
+    if (n & 0x01) {
+      //sample = (short int)wavetable[accum1t >> 20];
+      sample = 0;
+      accum1t += tuningWord1t;
+    }
+    else {
+      sample = (short int)wavetable[accum2t >> 20];
+      accum2t += tuningWord2t;
+    }
+
+    buffer_pp[n] = sample;
+
+  }
+    
+}
 
 void APP_MyBufferEventHandler( DRV_I2S_BUFFER_EVENT event, DRV_I2S_BUFFER_HANDLE bufferHandle, uintptr_t context )
 {
@@ -201,7 +238,6 @@ void APP_MyBufferEventHandler( DRV_I2S_BUFFER_EVENT event, DRV_I2S_BUFFER_HANDLE
             break;
     }
 }
-
 
 
 // *****************************************************************************
@@ -377,10 +413,10 @@ void APP_Tasks ( void )
                     DRV_I2S_BufferEventHandlerSet(appData.handleI2S0, &APP_MyBufferEventHandler, 0);
                     DRV_I2S_ReceiveErrorIgnore(appData.handleI2S0,true);
                     DRV_I2S_TransmitErrorIgnore(appData.handleI2S0,true);
-                    memset(buffer1,0,BUFFER_SIZE*8);
-                    memset(buffer2,0xFF,BUFFER_SIZE*8);
-                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE*8);
-                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE*8);
+                    memset(buffer1,0,BUFFER_SIZE);
+                    memset(buffer2,0xFF,BUFFER_SIZE);
+                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE);
+                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE);
                     
                 }
                 appInitialized &= (DRV_HANDLE_INVALID != appData.handleI2S0);
@@ -417,16 +453,7 @@ void APP_Tasks ( void )
             
             //delay_ms(100);
             
-            tx_packet[0] = 'H';
-            tx_packet[1] = 'E';
-            tx_packet[2] = 'L';
-            tx_packet[3] = 'L';
-            tx_packet[4] = 'O';
-			//USART_Task(); - original harmony code, unsure if still needed
-            if(!BUTTON1)
-            {
-                send_packet(5);
-            }
+
             
             
             
@@ -450,7 +477,23 @@ void APP_Tasks ( void )
             
             write_DAC(4);
             
-            printf("%d\n",dac_packet[1]);
+            tx_packet[0] = 'H';
+            tx_packet[1] = 'E';
+            tx_packet[2] = 'L';
+            tx_packet[3] = 'L';
+            tx_packet[4] = 'O';
+            
+            if(!BUTTON1)
+            {
+                if(!LCDFlag)
+                {
+                    LCDFlag = true;
+                    send_packet(5);
+                }
+            }
+            
+            //printf("%d\n",dac_packet[1]);
+            
             
         
           
@@ -487,7 +530,20 @@ void APP_Tasks ( void )
 //                LED2_OFF();
 //                //LED1_OFF();
 //            }
-
+         //DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer_pp,BUFFER_SIZE);
+//        if (bufferAFull == 0) {
+//            //printf("I am here\n");
+//            buffer_pp = &buffer_a[0];
+//            generate_sine();
+//            
+//            bufferAFull = 1;
+//            
+//        }
+//        if (bufferBFull == 0) {
+//            buffer_pp = &buffer_b[0];
+//            generate_sine();
+//            bufferBFull = 1;
+//        }
             
             break;
         }

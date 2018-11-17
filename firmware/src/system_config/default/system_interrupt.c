@@ -63,6 +63,15 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "app.h"
 #include "system_definitions.h"
 
+
+volatile unsigned char isFillFlag = 0;
+volatile unsigned char buffer_position = 0;
+volatile unsigned char bufferAFull = 0;
+volatile unsigned char bufferBFull = 0;
+extern short* buffer_pp;
+extern short buffer_a[];
+extern short buffer_b[];
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: System Interrupt Vector Functions
@@ -97,12 +106,20 @@ void __ISR(_UART1_FAULT_VECTOR, ipl1AUTO) _IntHandlerDrvUsartErrorInstance0(void
  
 void __ISR(_DMA0_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh0(void)
 {   
-    SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_0);
+    bufferAFull = 0;  
+    DCH1CONSET = 0x0000080;
+    DCH0INTCLR = 0x0000ff;
+    IFS1CLR    = (1<<28);
+    //SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_0);
 }
 
 void __ISR(_DMA1_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh1(void)
 {          
-    SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_1);
+    bufferBFull = 0;
+    DCH0CONSET = 0x00000080;
+    DCH1INTCLR = 0x0000ff;
+    IFS1CLR    = (1<<29);
+    //SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_1);
 }
  
 

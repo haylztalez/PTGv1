@@ -76,12 +76,14 @@ int main ( void )
     /* Initialize all MPLAB Harmony modules, including application(s). */
     SYS_Initialize ( NULL );
     //delay_ms(100);
+    LCDFlag = false;
 
     while ( true )
     {
        /* Maintain state machines of all polled MPLAB Harmony modules. */
         SYS_Tasks ( );
- 
+
+
     }
 
 

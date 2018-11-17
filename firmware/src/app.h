@@ -216,6 +216,9 @@ void APP_Initialize ( void );
   Remarks:
     This routine must be called from SYS_Tasks() routine.
  */
+bool LCDFlag;
+
+void send_packet(unsigned char x);
 
 void APP_Tasks( void );
 
