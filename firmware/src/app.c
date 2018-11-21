@@ -82,6 +82,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #define LED1_OFF() PLIB_PORTS_PinClear( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_15);
 #define LED2_ON() PLIB_PORTS_PinSet( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
 #define LED2_OFF() PLIB_PORTS_PinClear( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
+#define LED2_TOGGLE() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
 
 /* defining LEDS using LAT register */
 #define LED1 LATEbits.LATE15
@@ -336,81 +337,41 @@ void APP_Tasks ( void )
                 /* initialize the USART state machine */
                 usartBMState = USART_BM_INIT;
             
-                appData.state = APP_STATE_SERVICE_TASKS;
+                appData.state = APP_STATE_INIT_PERIPHERALS;
+                
+                printf("App is now initialized\n");
             }
             break;
         }
-
-        case APP_STATE_SERVICE_TASKS:
-        {
-            /* run the state machine for servicing the SPI */
-            //SPI_Task();
-			
-            printf("I made it");
-            delay_ms(100);
-            
-            tx_packet[0] = 'H';
-			//USART_Task(); - original harmony code, unsure if still needed
-            if(!BUTTON1)
-            {
-                send_packet(1);
-            }
-            
-            
-//            dac_packet[0] = 0b00010000;
-//            dac_packet[1] = 0b11101100;
-//            dac_packet[2] = 0b00010001;
-//            dac_packet[3] = 0b11101100;
-//            write_DAC(4);
-//            
-//            dac_packet[0] = 16;
-//            dac_packet[1] = 236;
-//            dac_packet[2] = 17;
-//            dac_packet[3] = 236;
-//            write_DAC(4);
+        case APP_STATE_INIT_PERIPHERALS:
             
             /*setting registers to line level(0dBv) amplitude*/
+            printf("Initializing 0dBv amplitude in DAC\n");
             dac_packet[0] = 16;
             dac_packet[1] = 255 - (uint8_t)(9.5f/.5f);
             dac_packet[2] = 17;
             dac_packet[3] = 255 - (uint8_t)(9.5f/.5f);
             write_DAC(4);
             
-            printf("%d\n",dac_packet[1]);
-          
-                
+            printf("Initializing LCD screen\n");
+            memcpy(tx_packet, "INITIALIZED", strlen("INITIALIZED"));
+            send_packet(strlen("INITIALIZED"));
             
-            if(appData.spiStateMachine == APP_SPI_STATE_START)
-            {
-                printf("start\n");
+            
+            appData.state = APP_STATE_SERVICE_TASKS;
+            break;
+        
+        case APP_STATE_SERVICE_TASKS:
+        {
+
+            static uint32_t _led_2_toggle_count = 0;
+            if ( _led_2_toggle_count++ % 100000 == 0 ) {
+                LED2_TOGGLE()
             }
-            else if (appData.spiStateMachine == APP_SPI_STATE_WAIT)
-            {
-                printf("wait\n");
-            }
-            else 
-            {
-                 printf("done\n");
-                 //appData.spiStateMachine = APP_SPI_STATE_START;
-            }
-               
-            
-            //printf("Hi\n");
-            
-            LED1 = !BUTTON2;
-            
-//            if(!BUTTON2)  // I think this means if button 1 is pressed
-//            {
-//                LED2_ON();
-//                               
-//            }
-//            else
-//            {
-//                LED2_OFF();
-//                //LED1_OFF();
-//            }
 
             
+            LED1 = !BUTTON2;
+
             break;
         }
 
