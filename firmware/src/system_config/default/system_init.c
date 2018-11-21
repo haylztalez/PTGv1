@@ -142,12 +142,11 @@ const DRV_I2S_INIT drvI2S0InitData =
     .audioTransmitMode = SPI_AUDIO_TRANSMIT_MODE_IDX0,
     .inputSamplePhase = SPI_INPUT_SAMPLING_PHASE_IDX0,
     .protocolMode = DRV_I2S_AUDIO_PROTOCOL_MODE_IDX0,
-    .txInterruptSource = DRV_I2S_TX_INT_SRC_IDX0,
-    .rxInterruptSource = DRV_I2S_RX_INT_SRC_IDX0,
-    .errorInterruptSource = DRV_I2S_ERR_INT_SRC_IDX0,
     .queueSizeTransmit = QUEUE_SIZE_TX_IDX0,
     .queueSizeReceive = QUEUE_SIZE_RX_IDX0,
-    .dmaChannelTransmit = DMA_CHANNEL_NONE,
+    .dmaChannelTransmit = DRV_I2S_TX_DMA_CHANNEL_IDX0,
+    .txInterruptSource = DRV_I2S_TX_INT_SRC_IDX0,    
+    .dmaInterruptTransmitSource = DRV_I2S_TX_DMA_SOURCE_IDX0,    
     .dmaChannelReceive = DMA_CHANNEL_NONE,
 };
 
@@ -176,6 +175,15 @@ SYSTEM_OBJECTS sysObj;
 // Section: Module Initialization Data
 // *****************************************************************************
 // *****************************************************************************
+//<editor-fold defaultstate="collapsed" desc="SYS_DMA Initialization Data">
+/*** System DMA Initialization Data ***/
+
+const SYS_DMA_INIT sysDmaInit =
+{
+	.sidl = SYS_DMA_SIDL_DISABLE,
+
+};
+// </editor-fold>
 
 // *****************************************************************************
 // *****************************************************************************
@@ -210,6 +218,13 @@ void SYS_Initialize ( void* data )
 
     /* Initialize Drivers */
     sysObj.drvI2S0 = DRV_I2S_Initialize(DRV_I2S_INDEX_0, (SYS_MODULE_INIT *)&drvI2S0InitData);
+
+
+    sysObj.sysDma = SYS_DMA_Initialize((SYS_MODULE_INIT *)&sysDmaInit);
+    SYS_INT_VectorPrioritySet(INT_VECTOR_DMA0, INT_PRIORITY_LEVEL1);
+    SYS_INT_VectorSubprioritySet(INT_VECTOR_DMA0, INT_SUBPRIORITY_LEVEL0);
+
+    SYS_INT_SourceEnable(INT_SOURCE_DMA_0);
 
 
 

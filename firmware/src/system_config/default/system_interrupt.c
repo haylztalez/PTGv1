@@ -95,6 +95,13 @@ void __ISR(_UART1_FAULT_VECTOR, ipl1AUTO) _IntHandlerDrvUsartErrorInstance0(void
  
  
  
+void __ISR(_DMA0_VECTOR, ipl1AUTO) _IntHandlerSysDmaCh0(void)
+{          
+    SYS_DMA_Tasks(sysObj.sysDma, DMA_CHANNEL_0);
+}
+
+ 
+
 /*******************************************************************************
  End of File
 */
