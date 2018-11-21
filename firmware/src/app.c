@@ -280,6 +280,7 @@ void APP_Initialize ( void )
     appData.handleSPI0 = DRV_HANDLE_INVALID;
     appData.handleUSART0 = DRV_HANDLE_INVALID;
     appData.handleSPI1 = DRV_HANDLE_INVALID;
+    appData.handleI2S = DRV_HANDLE_INVALID;
     
     /* TODO: Initialize your application's state machine and other
      * parameters.
