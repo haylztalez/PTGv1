@@ -364,9 +364,9 @@ void APP_Tasks ( void )
         case APP_STATE_SERVICE_TASKS:
         {
 
-            static uint32_t _led_2_toggle_count = 0;
-            if ( _led_2_toggle_count++ % 100000 == 0 ) {
-                LED2_TOGGLE()
+            static uint32_t _sanity_print = 0;
+            if ( _sanity_print++ % 1000000 == 0 ) {
+                printf(".");
             }
 
             
