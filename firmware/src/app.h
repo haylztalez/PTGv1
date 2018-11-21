@@ -134,6 +134,7 @@ typedef struct
     DRV_HANDLE handleSPI1;
 	int tx_count;
 
+    DRV_HANDLE handleI2S;
 } APP_DATA;
 
 

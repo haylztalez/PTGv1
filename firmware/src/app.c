@@ -54,6 +54,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "app.h"
+#include "system_config/default/system_definitions.h"
 #include <stdio.h>
 
 // *****************************************************************************
@@ -323,6 +324,13 @@ void APP_Tasks ( void )
                 appData.handleUSART0 = DRV_USART_Open(APP_DRV_USART, DRV_IO_INTENT_READWRITE|DRV_IO_INTENT_NONBLOCKING);
                 appInitialized &= ( DRV_HANDLE_INVALID != appData.handleUSART0 );
             }
+            
+            if (appData.handleI2S == DRV_HANDLE_INVALID)
+            {
+                appData.handleI2S = DRV_I2S_Open(DRV_I2S_INDEX_0, DRV_IO_INTENT_WRITE);
+                
+                appInitialized &= (DRV_HANDLE_INVALID != appData.handleI2S); 
+            }
 //            
 //            if (appData.handleSPI3 == DRV_HANDLE_INVALID)
 //            {
@@ -357,6 +365,10 @@ void APP_Tasks ( void )
             memcpy(tx_packet, "INITIALIZED", strlen("INITIALIZED"));
             send_packet(strlen("INITIALIZED"));
             
+            int32_t i2s_status = (int32_t)DRV_I2S_Status(sysObj.drvI2S0);
+            printf("Initializing I2S... status = %d\n", i2s_status);
+            DRV_I2S_TransmitErrorIgnore(appData.handleI2S, true);
+            DRV_I2S_BaudSet(appData.handleI2S, (48000*4), 48000);
             
             appData.state = APP_STATE_SERVICE_TASKS;
             break;
