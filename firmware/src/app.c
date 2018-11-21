@@ -155,16 +155,40 @@ void write_DAC(unsigned char d)
     SS2_TRIGGER = 1;
     
 }
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
 // *****************************************************************************
 // *****************************************************************************
 
-/* TODO:  Add any necessary callback functions.
-*/
+#define BUFFER_SIZE 10
+DRV_I2S_BUFFER_HANDLE bufferHandle1;
+DRV_I2S_BUFFER_HANDLE bufferHandle2;
+char buffer1[BUFFER_SIZE*8];
+char buffer2[BUFFER_SIZE*8];
 
+ void APP_MyBufferEventHandler( DRV_I2S_BUFFER_EVENT event, DRV_I2S_BUFFER_HANDLE bufferHandle, uintptr_t context )
+{
+   // printf("E");
+    switch(event)
+    {
+        case DRV_I2S_BUFFER_EVENT_COMPLETE:
+            if(bufferHandle == bufferHandle1)
+            {
+                //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle1,buffer1,BUFFER_SIZE*8);
+            }
+            else if(bufferHandle == bufferHandle2)
+            {
+                //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle2,buffer2,BUFFER_SIZE*8);
+            }
+            // Handle the completed buffer.
+            break;
+         case DRV_I2S_BUFFER_EVENT_ERROR:
+        default:
+             // Handle error.
+            break;
+    }
+}
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Local Functions
@@ -331,6 +355,8 @@ void APP_Tasks ( void )
                 appData.handleI2S = DRV_I2S_Open(DRV_I2S_INDEX_0, DRV_IO_INTENT_WRITE);
                 
                 appInitialized &= (DRV_HANDLE_INVALID != appData.handleI2S); 
+                
+                printf("I2SHandle: 0x%X\n", appData.handleI2S);
             }
 //            
 //            if (appData.handleSPI3 == DRV_HANDLE_INVALID)
@@ -368,8 +394,18 @@ void APP_Tasks ( void )
             
             int32_t i2s_status = (int32_t)DRV_I2S_Status(sysObj.drvI2S0);
             printf("Initializing I2S... status = %d\n", i2s_status);
+            DRV_I2S_BufferEventHandlerSet(appData.handleI2S, &APP_MyBufferEventHandler, 0);
+
             DRV_I2S_TransmitErrorIgnore(appData.handleI2S, true);
             DRV_I2S_BaudSet(appData.handleI2S, (48000*4), 48000);
+            
+
+            memset(buffer1,0,BUFFER_SIZE*8);
+            memset(buffer2,0xFF,BUFFER_SIZE*8);
+            printf("Before AddBuffer\n");
+            //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle1,buffer1,BUFFER_SIZE*8);
+            printf("After AddBuffer\n");
+            //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle2,buffer2,BUFFER_SIZE*8);
             
             appData.state = APP_STATE_SERVICE_TASKS;
             break;
