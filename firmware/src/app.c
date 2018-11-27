@@ -174,8 +174,8 @@ void write_DAC(unsigned char d)
 DRV_I2S_BUFFER_HANDLE bufferHandle1;
 DRV_I2S_BUFFER_HANDLE bufferHandle2;
 
-char buffer1[BUFFER_SIZE*8];
-char buffer2[BUFFER_SIZE*8];
+static unsigned char buffer1[BUFFER_SIZE*8] = {0xFF};
+static unsigned char buffer2[BUFFER_SIZE*8];
 
 //DCH0SSA = KVA_TO_PA(&buffer1[0]);
 //DCH1SSA = KVA_TO_PA(&buffer2[0]);
@@ -475,9 +475,10 @@ void APP_Tasks ( void )
             DRV_I2S_TransmitErrorIgnore(appData.handleI2S, true);
             DRV_I2S_BaudSet(appData.handleI2S, (48000*2), 48000);
             
-
-            memset(buffer1,0,BUFFER_SIZE*8);
-            memset(buffer2,0xFF,BUFFER_SIZE*8);
+            //buffer1 = 26;
+            //strcpy(buffer1, 0XFF);
+            //memset(buffer1,0xFF,BUFFER_SIZE*8);
+            //memset(buffer2,0xFF,BUFFER_SIZE*8);
             printf("Before AddBuffer\n");
             DRV_I2S_BufferAddWrite(appData.handleI2S,&appData.drvI2SBufferHandle,buffer1,BUFFER_SIZE*8);
             printf("After AddBuffer\n");
