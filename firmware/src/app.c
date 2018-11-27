@@ -54,6 +54,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "app.h"
+#include "system_config/default/system_definitions.h"
 #include <stdio.h>
 
 // *****************************************************************************
@@ -97,8 +98,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #define SS3_TRIGGER LATFbits.LATF0
 #define SS2_TRIGGER LATAbits.LATA4
 
-/* defining DDS stuff */
-#define BUFFER_SIZE 32*8 //
+
 
 /* delay function, used as delay_ms(100) to delay 100 ms */
 //void delay_ms(int n){
@@ -126,7 +126,7 @@ void delay_ms(unsigned int count)
 
 
 APP_DATA appData;
-static uint8_t __attribute__ ((aligned (16))) app_spi_tx_buffer[] = {};
+static uint8_t __attribute__ ((aligned (16))) app_spi_tx_buffer[] = {'H'};
 
 static uint8_t __attribute__ ((aligned (16))) app_spi_rx_buffer[sizeof(app_spi_tx_buffer)];
 
@@ -169,11 +169,13 @@ void write_DAC(unsigned char d)
     
 }
 
+/* defining DDS stuff */
+#define BUFFER_SIZE 10 //
 DRV_I2S_BUFFER_HANDLE bufferHandle1;
 DRV_I2S_BUFFER_HANDLE bufferHandle2;
 
-char buffer1[BUFFER_SIZE];
-char buffer2[BUFFER_SIZE];
+char buffer1[BUFFER_SIZE*8];
+char buffer2[BUFFER_SIZE*8];
 
 //DCH0SSA = KVA_TO_PA(&buffer1[0]);
 //DCH1SSA = KVA_TO_PA(&buffer2[0]);
@@ -217,17 +219,17 @@ char buffer2[BUFFER_SIZE];
 
 void APP_MyBufferEventHandler( DRV_I2S_BUFFER_EVENT event, DRV_I2S_BUFFER_HANDLE bufferHandle, uintptr_t context )
 {
-    printf("here");
+    //printf("here");
     switch(event)
     {
         case DRV_I2S_BUFFER_EVENT_COMPLETE:
             if(bufferHandle == bufferHandle1)
             {
-                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE);
+                //DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE);
             }
             else if(bufferHandle == bufferHandle2)
             {
-                DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE);
+                //DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer2,BUFFER_SIZE);
             }
             // Handle the completed buffer.
             break;
@@ -365,6 +367,7 @@ void APP_Initialize ( void )
     appData.handleSPI0 = DRV_HANDLE_INVALID;
     appData.handleUSART0 = DRV_HANDLE_INVALID;
     appData.handleSPI1 = DRV_HANDLE_INVALID;
+    appData.handleI2S = DRV_HANDLE_INVALID;
     
     /* TODO: Initialize your application's state machine and other
      * parameters.
@@ -391,6 +394,7 @@ void APP_Tasks ( void )
         {
             //NO printf("are you getting here?\n");
             bool appInitialized = true;
+            printf("%d\n",appInitialized);
        
 
             if (DRV_HANDLE_INVALID == appData.handleSPI0)
@@ -405,23 +409,24 @@ void APP_Tasks ( void )
                 appInitialized &= (DRV_HANDLE_INVALID != appData.handleSPI1);
             }
             
-            if (appData.handleI2S0 == DRV_HANDLE_INVALID )
+            if (appData.handleI2S == DRV_HANDLE_INVALID )
             {
-                appData.handleI2S0 = DRV_I2S_Open(0, DRV_IO_INTENT_READWRITE);
-                printf("HERE");
-                if(DRV_HANDLE_INVALID != appData.handleI2S0)
-                {
-               
-                    DRV_I2S_BufferEventHandlerSet(appData.handleI2S0, &APP_MyBufferEventHandler, 0);
-                    DRV_I2S_ReceiveErrorIgnore(appData.handleI2S0,true);
-                    DRV_I2S_TransmitErrorIgnore(appData.handleI2S0,true);
-                    memset(buffer1,0,BUFFER_SIZE);
-                    memset(buffer2,0xFF,BUFFER_SIZE);
-                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE);
-                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer1,BUFFER_SIZE);
-                    
-                }
-                appInitialized &= (DRV_HANDLE_INVALID != appData.handleI2S0);
+                appData.handleI2S = DRV_I2S_Open(0, DRV_IO_INTENT_READWRITE);
+              
+//                if(DRV_HANDLE_INVALID != appData.handleI2S0)
+//                {
+//               
+//                    DRV_I2S_BufferEventHandlerSet(appData.handleI2S0, &APP_MyBufferEventHandler, 0);
+//                    DRV_I2S_ReceiveErrorIgnore(appData.handleI2S0,true);
+//                    DRV_I2S_TransmitErrorIgnore(appData.handleI2S0,true);
+//                    memset(buffer1,0,BUFFER_SIZE);
+//                    memset(buffer2,0xFF,BUFFER_SIZE);
+//                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle1,buffer1,BUFFER_SIZE);
+//                    DRV_I2S_BufferAddWrite(appData.handleI2S0,&bufferHandle2,buffer1,BUFFER_SIZE);
+//                    
+//                }
+                appInitialized &= (DRV_HANDLE_INVALID != appData.handleI2S);
+                printf("I2SHandle: 0x%X\n", appData.handleI2S);
             }
 
             if (appData.handleUSART0 == DRV_HANDLE_INVALID)
@@ -439,101 +444,59 @@ void APP_Tasks ( void )
             if (appInitialized)
             {
                 /* initialize the SPI state machine */
-                appData.spiStateMachine = APP_SPI_STATE_START;
+                //appData.spiStateMachine = APP_SPI_STATE_START;
                 /* initialize the USART state machine */
                 usartBMState = USART_BM_INIT;
             
-                appData.state = APP_STATE_SERVICE_TASKS;
+                appData.state = APP_STATE_INIT_PERIPHERALS;
+                printf("App is now initialized\n");
             }
             break;
         }
-
-        case APP_STATE_SERVICE_TASKS:
-        {
-            /* run the state machine for servicing the SPI */
-            
-            //delay_ms(100);
-            
-//            dac_packet[0] = 0b00010000;
-//            dac_packet[1] = 0b11101100;
-//            dac_packet[2] = 0b00010001;
-//            dac_packet[3] = 0b11101100;
-//            write_DAC(4);
-//            
-//            dac_packet[0] = 16;
-//            dac_packet[1] = 236;
-//            dac_packet[2] = 17;
-//            dac_packet[3] = 236;
-//            write_DAC(4);
+        
+        case APP_STATE_INIT_PERIPHERALS:
             
             /*setting registers to line level(0dBv) amplitude*/
+            printf("Initializing 0dBv amplitude in DAC\n");
             dac_packet[0] = 16;
             dac_packet[1] = 255 - (uint8_t)(9.5f/.5f);
             dac_packet[2] = 17;
             dac_packet[3] = 255 - (uint8_t)(9.5f/.5f);
-            
             write_DAC(4);
             
-            tx_packet[0] = 'T';
-            tx_packet[1] = 'H';
-            tx_packet[2] = 'I';
-            tx_packet[3] = 'S';
-            tx_packet[4] = ' ';
-            tx_packet[5] = 'I';
-            tx_packet[6] = 'S';
-            tx_packet[7] = ' ';
-            tx_packet[8] = 'H';
-            tx_packet[9] = 'A';
-            tx_packet[10] = 'R';
-            tx_packet[11] = 'D';
-            tx_packet[12] = ':';
-            tx_packet[13] = '(';
+            printf("Initializing LCD screen\n");
+            memcpy(tx_packet, "INITIALIZED", strlen("INITIALIZED"));
+            send_packet(strlen("INITIALIZED"));
+            
+            int32_t i2s_status = (int32_t)DRV_I2S_Status(sysObj.drvI2S0);
+            printf("Initializing I2S... status = %d\n", i2s_status);
+            DRV_I2S_BufferEventHandlerSet(appData.handleI2S, &APP_MyBufferEventHandler, 0);
 
+            DRV_I2S_TransmitErrorIgnore(appData.handleI2S, true);
+            DRV_I2S_BaudSet(appData.handleI2S, (48000*2), 48000);
             
+
+            memset(buffer1,0,BUFFER_SIZE*8);
+            memset(buffer2,0xFF,BUFFER_SIZE*8);
+            printf("Before AddBuffer\n");
+            DRV_I2S_BufferAddWrite(appData.handleI2S,&appData.drvI2SBufferHandle,buffer1,BUFFER_SIZE*8);
+            printf("After AddBuffer\n");
+            //DRV_I2S_BufferAddWrite(appData.handleI2S,&appData.drvI2SBufferHandle2,buffer2,BUFFER_SIZE*8);
+            printf("End of INIT_PERIPH");
             
-            
-            if(!BUTTON1)
-            {
-                if(!LCDFlag)
-                {
-                    LCDFlag = true;
-                    send_packet(14);
-                    tx_packet[0] = 0xFE;
-                    tx_packet[1] = 0x45;
-                    tx_packet[2] = 0x40;
-                    send_packet(3);
-                    tx_packet[0] = 'P';
-                    tx_packet[1] = 'L';
-                    tx_packet[2] = 'Z';
-                    tx_packet[3] = ' ';
-                    tx_packet[4] = 'H';
-                    tx_packet[5] = 'E';
-                    tx_packet[6] = 'L';
-                    tx_packet[7] = 'P';
-                    send_packet(8);
-                }
+            appData.state = APP_STATE_SERVICE_TASKS;
+            break;
+
+        case APP_STATE_SERVICE_TASKS:
+        {
+           
+            static uint32_t _sanity_print = 0;
+            if ( _sanity_print++ % 1000000 == 0 ) {
+                printf(".");
             }
-            
-            printf("%d\n",dac_packet[1]);
-            
 
+            
             LED1 = !BUTTON2;
-            
-            
-//            
-//        if (bufferAFull == 0) {
-//            //printf("I am here\n");
-//            buffer_pp = &buffer_a[0];
-//            generate_sine();
-//            
-//            bufferAFull = 1;
-//            
-//        }
-//        if (bufferBFull == 0) {
-//            buffer_pp = &buffer_b[0];
-//            generate_sine();
-//            bufferBFull = 1;
-//        }
             
             break;
         }

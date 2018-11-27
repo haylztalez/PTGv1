@@ -75,10 +75,10 @@ int main ( void )
 {
     /* Initialize all MPLAB Harmony modules, including application(s). */
     SYS_Initialize ( NULL );
-    //delay_ms(100);
-    LCDFlag = false;
+    delay_ms(100);
+    //LCDFlag = false;
     
-    IFS1bits.SPI1TXIF = 1;
+    //IFS1bits.SPI1TXIF = 1;
 
     while ( true )
     {

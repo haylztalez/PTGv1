@@ -96,7 +96,7 @@ extern "C" {
 #define SYS_PORT_A_ANSEL        0xE26F
 #define SYS_PORT_A_TRIS         0xFFEF
 #define SYS_PORT_A_LAT          0x0000
-#define SYS_PORT_A_ODC          0x0000
+#define SYS_PORT_A_ODC          0x0100
 #define SYS_PORT_A_CNPU         0x0000
 #define SYS_PORT_A_CNPD         0x0000
 #define SYS_PORT_A_CNEN         0x0000
@@ -134,7 +134,7 @@ extern "C" {
 #define SYS_PORT_E_CNEN         0x0000
 
 #define SYS_PORT_F_ANSEL        0xFFFC
-#define SYS_PORT_F_TRIS         0xFFFE
+#define SYS_PORT_F_TRIS         0xFFFF
 #define SYS_PORT_F_LAT          0x0000
 #define SYS_PORT_F_ODC          0x0000
 #define SYS_PORT_F_CNPU         0x0000
@@ -152,15 +152,6 @@ extern "C" {
 
 /*** Interrupt System Service Configuration ***/
 #define SYS_INT                     true
-/*** Timer System Service Configuration ***/
-#define SYS_TMR_POWER_STATE             SYS_MODULE_POWER_RUN_FULL
-#define SYS_TMR_DRIVER_INDEX            DRV_TMR_INDEX_0
-#define SYS_TMR_MAX_CLIENT_OBJECTS      5
-#define SYS_TMR_FREQUENCY               1000
-#define SYS_TMR_FREQUENCY_TOLERANCE     10
-#define SYS_TMR_UNIT_RESOLUTION         10000
-#define SYS_TMR_CLIENT_TOLERANCE        10
-#define SYS_TMR_INTERRUPT_NOTIFICATION  false
 
 // *****************************************************************************
 // *****************************************************************************
@@ -188,13 +179,11 @@ extern "C" {
 #define DRV_I2S_TX_INT_SRC_IDX0					INT_SOURCE_SPI_1_TRANSMIT
 #define DRV_I2S_RX_INT_SRC_IDX0					INT_SOURCE_SPI_1_RECEIVE
 #define QUEUE_SIZE_TX_IDX0                      3
-#define QUEUE_SIZE_RX_IDX0                      1
+#define QUEUE_SIZE_RX_IDX0                      2
 #define DRV_I2S_TX_DMA_CHANNEL_IDX0				DMA_CHANNEL_0
-#define DRV_I2S_TX_DMA_CHAINING_CHANNEL_IDX0    DMA_CHANNEL_1
 #define DRV_I2S_TX_DMA_SOURCE_IDX0				INT_SOURCE_DMA_0
-#define DRV_I2S_TX_DMA_CHAINING_SOURCE_IDX0		INT_SOURCE_DMA_1
 #define DRV_I2S_POWER_STATE_IDX0				SYS_MODULE_POWER_RUN_FULL
-#define DRV_I2S_QUEUE_DEPTH_COMBINED     		4
+#define DRV_I2S_QUEUE_DEPTH_COMBINED     		5
 
 
 /*** SPI Driver Configuration ***/
@@ -216,25 +205,7 @@ extern "C" {
 #define DRV_SPI_INSTANCES_NUMBER 		2
 #define DRV_SPI_CLIENTS_NUMBER 			2
 #define DRV_SPI_ELEMENTS_PER_QUEUE 		10
-/*** Timer Driver Configuration ***/
-#define DRV_TMR_INTERRUPT_MODE             true
-#define DRV_TMR_INSTANCES_NUMBER           1
-#define DRV_TMR_CLIENTS_NUMBER             1
-
-/*** Timer Driver 0 Configuration ***/
-#define DRV_TMR_PERIPHERAL_ID_IDX0          TMR_ID_1
-#define DRV_TMR_INTERRUPT_SOURCE_IDX0       INT_SOURCE_TIMER_1
-#define DRV_TMR_INTERRUPT_VECTOR_IDX0       INT_VECTOR_T1
-#define DRV_TMR_ISR_VECTOR_IDX0             _TIMER_1_VECTOR
-#define DRV_TMR_INTERRUPT_PRIORITY_IDX0     INT_PRIORITY_LEVEL1
-#define DRV_TMR_INTERRUPT_SUB_PRIORITY_IDX0 INT_SUBPRIORITY_LEVEL0
-#define DRV_TMR_CLOCK_SOURCE_IDX0           DRV_TMR_CLKSOURCE_INTERNAL
-#define DRV_TMR_PRESCALE_IDX0               TMR_PRESCALE_VALUE_256
-#define DRV_TMR_OPERATION_MODE_IDX0         DRV_TMR_OPERATION_MODE_16_BIT
-#define DRV_TMR_ASYNC_WRITE_ENABLE_IDX0     false
-#define DRV_TMR_POWER_STATE_IDX0            SYS_MODULE_POWER_RUN_FULL
-
- // *****************************************************************************
+// *****************************************************************************
 /* USART Driver Configuration Options
 */
 #define DRV_USART_INSTANCES_NUMBER                  1

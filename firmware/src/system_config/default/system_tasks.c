@@ -71,14 +71,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 void SYS_Tasks ( void )
 {
-    /*ADDING THESE BREAKS THE CODE*/
     /* Maintain system services */
-    /* SYS_TMR Device layer tasks routine */ 
-    SYS_TMR_Tasks(sysObj.sysTmr);
 
     /* Maintain Device Drivers */
-    //DRV_I2S_Tasks(sysObj.drvI2S0);
-    //DRV_I2S_TasksError(sysObj.drvI2S0);
+
     /* Maintain Middleware & Other Libraries */
 
     /* Maintain the application's state machine. */
