@@ -304,7 +304,11 @@ void APP_Tasks ( void )
             dac_packet[1] = 255 - (uint8_t)(9.5f/.5f);
             dac_packet[2] = 17;
             dac_packet[3] = 255 - (uint8_t)(9.5f/.5f);
-            write_DAC(4);
+            //write_DAC(4);
+            
+            dac_packet[0] = 20;
+            dac_packet[1] = 0b100;
+            write_DAC(2);
             
             printf("Initializing LCD screen\n");
             memcpy(tx_packet, "INITIALIZED", strlen("INITIALIZED"));
