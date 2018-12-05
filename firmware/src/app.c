@@ -195,93 +195,6 @@ char buffer2[BUFFER_SIZE*8];
 // *****************************************************************************
 // *****************************************************************************
 
-/* state machine for the SPI */
-//static void SPI_Task(void)
-//{
-//    /* run the state machine here for SPI */
-//    switch (appData.spiStateMachine)
-//    {
-//        default:
-//        case APP_SPI_STATE_START:
-//            /* Blocking: When the call exits, all data has been exchanged (if we get a valid handle) */
-//            SS3_TRIGGER = 0;
-//            appData.drvSPIBufferHandle = DRV_SPI_BufferAddWriteRead(appData.handleSPI0,
-//                app_spi_tx_buffer, sizeof(app_spi_tx_buffer),
-//                app_spi_rx_buffer, sizeof(app_spi_rx_buffer),
-//                0, 0);
-//
-//            if (DRV_SPI_BUFFER_HANDLE_INVALID != appData.drvSPIBufferHandle)
-//            {
-//                /* Blocking Write/Read has finished */
-//                appData.spiStateMachine =  APP_SPI_STATE_DONE;
-//            }
-//
-//            if (DRV_SPI_BUFFER_HANDLE_INVALID == appData.drvSPIBufferHandle)
-//            {
-//                /* try again if we get a bad handle */
-//                appData.spiStateMachine =  APP_SPI_STATE_START;
-//            }
-//        break;
-//
-//        case APP_SPI_STATE_DONE:
-//            SS3_TRIGGER = 1;
-//        break;
-//    }
-//}
-
-/******************************************************************************
-  Function:
-    static void USART_Task (void)
-    
-   Remarks:
-    Feeds the USART transmitter by reading characters from a specified pipe.  The pipeRead function is a 
-    standard interface that allows data to be exchanged between different automatically 
-    generated application modules.  Typically, the pipe is connected to the application's
-    USART receive function, but could be any other Harmony module which supports the pipe interface. 
-*/
-//static void USART_Task (void)
-//{
-//    switch (usartBMState)
-//    {
-//        default:
-//        case USART_BM_INIT:
-//        {
-//            appData.tx_count = 0;
-//            usartBMState = USART_BM_WORKING;
-//            break;
-//        }
-//
-//        case USART_BM_WORKING:
-//        {
-//            
-////            if (appData.tx_count < sizeof(app_tx_buf)) 
-////            {
-////                if(!DRV_USART_TransmitBufferIsFull(appData.handleUSART0))
-////                {
-////                    DRV_USART_WriteByte(appData.handleUSART0, app_tx_buf[appData.tx_count]);
-////                    appData.tx_count++;
-////                }
-////            }
-////
-////            /* Have we finished? */
-////            if (appData.tx_count == sizeof(app_tx_buf))
-////            {
-////                usartBMState = USART_BM_DONE;
-////            }
-//            break;
-//        }
-//
-//        case USART_BM_DONE:
-//        {
-//            break;
-//        }
-//    }
-//}
-
-/* TODO:  Add any necessary local functions.
-*/
-
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Initialization and State Machine Functions
@@ -397,7 +310,7 @@ void APP_Tasks ( void )
             DRV_I2S_BufferEventHandlerSet(appData.handleI2S, &APP_MyBufferEventHandler, 0);
 
             DRV_I2S_TransmitErrorIgnore(appData.handleI2S, true);
-            DRV_I2S_BaudSet(appData.handleI2S, (48000*4), 48000);
+            DRV_I2S_BaudSet(appData.handleI2S, (48000*4), 48000*2);
             
 
             memset(buffer1,0,BUFFER_SIZE*8);
