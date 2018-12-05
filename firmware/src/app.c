@@ -81,6 +81,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /* defining LEDS with peripheral library*/
 #define LED1_ON() PLIB_PORTS_PinSet( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_15);
 #define LED1_OFF() PLIB_PORTS_PinClear( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_15);
+#define LED1_TOGGLE PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_15);
 #define LED2_ON() PLIB_PORTS_PinSet( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
 #define LED2_OFF() PLIB_PORTS_PinClear( PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
 #define LED2_TOGGLE() PLIB_PORTS_PinToggle(PORTS_ID_0, PORT_CHANNEL_E, PORTS_BIT_POS_14);
@@ -130,6 +131,7 @@ static enum
 /* allows us to use "printf()" to write to serial port */
 void _mon_putc(const char print_byte)
 {
+    return;
     while(DRV_USART_TransmitBufferIsFull(appData.handleUSART0)) 
     {
         
@@ -161,25 +163,26 @@ void write_DAC(unsigned char d)
 // *****************************************************************************
 // *****************************************************************************
 
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 100
 DRV_I2S_BUFFER_HANDLE bufferHandle1;
 DRV_I2S_BUFFER_HANDLE bufferHandle2;
-char buffer1[BUFFER_SIZE*8];
-char buffer2[BUFFER_SIZE*8];
+uint8_t buffer1[BUFFER_SIZE*8];
+uint8_t buffer2[BUFFER_SIZE*8];
 
  void APP_MyBufferEventHandler( DRV_I2S_BUFFER_EVENT event, DRV_I2S_BUFFER_HANDLE bufferHandle, uintptr_t context )
 {
-   // printf("E");
+    printf("*");
+    LED1_TOGGLE
     switch(event)
     {
         case DRV_I2S_BUFFER_EVENT_COMPLETE:
             if(bufferHandle == bufferHandle1)
             {
-                //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle1,buffer1,BUFFER_SIZE*8);
+                DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle1,buffer1,BUFFER_SIZE*8);
             }
             else if(bufferHandle == bufferHandle2)
             {
-                //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle2,buffer2,BUFFER_SIZE*8);
+                DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle2,buffer2,BUFFER_SIZE*8);
             }
             // Handle the completed buffer.
             break;
@@ -244,7 +247,6 @@ void APP_Tasks ( void )
         {
             bool appInitialized = true;
        
-
             if (DRV_HANDLE_INVALID == appData.handleSPI0)
             {
                 appData.handleSPI0 = DRV_SPI_Open(0, DRV_IO_INTENT_READWRITE);
@@ -263,6 +265,8 @@ void APP_Tasks ( void )
                 appInitialized &= ( DRV_HANDLE_INVALID != appData.handleUSART0 );
             }
             
+            printf("\n******************************* INIT ******************************\n");
+            
             if (appData.handleI2S == DRV_HANDLE_INVALID)
             {
                 appData.handleI2S = DRV_I2S_Open(DRV_I2S_INDEX_0, DRV_IO_INTENT_WRITE);
@@ -280,6 +284,7 @@ void APP_Tasks ( void )
         
             if (appInitialized)
             {
+                LED2_OFF();
                 /* initialize the SPI state machine */
                 appData.spiStateMachine = APP_SPI_STATE_START;
                 /* initialize the USART state machine */
@@ -313,12 +318,12 @@ void APP_Tasks ( void )
             DRV_I2S_BaudSet(appData.handleI2S, (48000*4), 48000*2);
             
 
-            memset(buffer1,0,BUFFER_SIZE*8);
+            memset(buffer1,0x0,BUFFER_SIZE*8);
             memset(buffer2,0xFF,BUFFER_SIZE*8);
             printf("Before AddBuffer\n");
-            //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle1,buffer1,BUFFER_SIZE*8);
+            DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle1,&buffer1,BUFFER_SIZE*8);
             printf("After AddBuffer\n");
-            //DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle2,buffer2,BUFFER_SIZE*8);
+            DRV_I2S_BufferAddWrite(appData.handleI2S,&bufferHandle2,buffer2,BUFFER_SIZE*8);
             
             appData.state = APP_STATE_SERVICE_TASKS;
             break;
@@ -329,11 +334,10 @@ void APP_Tasks ( void )
             static uint32_t _sanity_print = 0;
             if ( _sanity_print++ % 1000000 == 0 ) {
                 printf(".");
+                //LED1_TOGGLE
+                LED2_TOGGLE();
             }
-
             
-            LED1 = !BUTTON2;
-
             break;
         }
 
