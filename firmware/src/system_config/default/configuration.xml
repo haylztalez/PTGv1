@@ -9,7 +9,7 @@
     <Processor dnOrder="1" name="PIC32MK1024MCF064"/>
     <Board dnOrder="2" name=" "/>
     <ForceOptimization dnOrder="3" flag="true"/>
-    <MergeStrategy dnOrder="4" flag="ALL"/>
+    <MergeStrategy dnOrder="4" flag="USER_RECENT"/>
   </General>
   <Manifest>
     <Files dnOrder="0">
@@ -171,67 +171,56 @@
         <Name dnOrder="0">sys_ports_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/ports/src</Path>
         <Checksum dnOrder="2">13E51FFFD09A4EA411365F6E73CC986B</Checksum>
-        <ProjectFileChecksum dnOrder="3">09ACC68935DE7E9DCDACCE85575CE1CC</ProjectFileChecksum>
       </Template>
       <Template dnOrder="1">
         <Name dnOrder="0">drv_spi_static_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
         <Checksum dnOrder="2">0CCE79463B60165F12DEA2DEDB06D5B9</Checksum>
-        <ProjectFileChecksum dnOrder="3">7A057905F8C380F249401523BD40A6A3</ProjectFileChecksum>
       </Template>
       <Template dnOrder="2">
         <Name dnOrder="0">sys_clk_pic32mk.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/clk/src</Path>
         <Checksum dnOrder="2">593164AF032F63BFF8FCA47CB3C9449A</Checksum>
-        <ProjectFileChecksum dnOrder="3">0844677189CD60939A800A9B230D07F6</ProjectFileChecksum>
       </Template>
       <Template dnOrder="3">
         <Name dnOrder="0">drv_usart_mapping.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
         <Checksum dnOrder="2">84D12D754B67B6F268A7243A5A473239</Checksum>
-        <ProjectFileChecksum dnOrder="3">E9CB4EF75B25ACD07FD4F97AD36F8009</ProjectFileChecksum>
       </Template>
       <Template dnOrder="4">
         <Name dnOrder="0">sys_devcon_local.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
         <Checksum dnOrder="2">B66F9B4DBD85DA7F9DE775E864E01395</Checksum>
-        <ProjectFileChecksum dnOrder="3">9A43558B796098288320CC84A6958531</ProjectFileChecksum>
       </Template>
       <Template dnOrder="5">
         <Name dnOrder="0">sys_devcon.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/system/devcon</Path>
         <Checksum dnOrder="2">07580DCDEF89D9C79B062544109C5367</Checksum>
-        <ProjectFileChecksum dnOrder="3">D82E373DCF86CAD4048D7F2553EC7689</ProjectFileChecksum>
       </Template>
       <Template dnOrder="6">
         <Name dnOrder="0">drv_usart_static_byte_model.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
         <Checksum dnOrder="2">B984EFF6A7FF6AD828EE634E1351AE46</Checksum>
-        <ProjectFileChecksum dnOrder="3">1F6D12E855783AF6535B6D698062DB48</ProjectFileChecksum>
       </Template>
       <Template dnOrder="7">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">DA69CC36429E9CB390EBF0A597CC5BAF</Checksum>
-        <ProjectFileChecksum dnOrder="3">5ABE70B6A9EDEEF4509BCB67656D8B47</ProjectFileChecksum>
       </Template>
       <Template dnOrder="8">
         <Name dnOrder="0">drv_spi_static_local.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
         <Checksum dnOrder="2">B3E388D321AEC4F0B0FC12196172160E</Checksum>
-        <ProjectFileChecksum dnOrder="3">EC01F057F1CF6F26EC0591EBB31D2291</ProjectFileChecksum>
       </Template>
       <Template dnOrder="9">
         <Name dnOrder="0">drv_usart_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
         <Checksum dnOrder="2">D3D61239A9C09749271D6A8F1AFC0285</Checksum>
-        <ProjectFileChecksum dnOrder="3">EB2CA09C0EA5D3BD0F28131BCAEE1DF6</ProjectFileChecksum>
       </Template>
       <Template dnOrder="10">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">594DD96821ED92DFD972CE4D2CEC38F2</Checksum>
-        <ProjectFileChecksum dnOrder="3">44BBCF905FCC2FC52BA789BD01547EB3</ProjectFileChecksum>
       </Template>
       <Template dnOrder="11">
         <Name dnOrder="0">main.c</Name>
@@ -243,37 +232,31 @@
         <Name dnOrder="0">drv_spi_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
         <Checksum dnOrder="2">35AF501BD360C87F90FD0EDBFCBED8C8</Checksum>
-        <ProjectFileChecksum dnOrder="3">B38302A8541EE46444A781FCCCCEFFF6</ProjectFileChecksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">system_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">5BC5C5861599D59AF78A4CF8F637B313</Checksum>
-        <ProjectFileChecksum dnOrder="3">1828CCB3D95CF20AF5C91C5C37E01940</ProjectFileChecksum>
       </Template>
       <Template dnOrder="14">
         <Name dnOrder="0">system_exceptions.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">9836A04F3E98D3971DB91DF539160F34</Checksum>
-        <ProjectFileChecksum dnOrder="3">2F902EDFE2CECF85AB97121019451E4B</ProjectFileChecksum>
       </Template>
       <Template dnOrder="15">
         <Name dnOrder="0">drv_spi_static_sys_queue.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
         <Checksum dnOrder="2">3D489FB0B5415BB6F80FA34FC0CEE9F7</Checksum>
-        <ProjectFileChecksum dnOrder="3">44ACC543E651EF9EC25E9D08472FB44A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="16">
         <Name dnOrder="0">sys_devcon.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
         <Checksum dnOrder="2">54ADBD4A35BCA03C42C74182FCE41849</Checksum>
-        <ProjectFileChecksum dnOrder="3">C6E737B1D8A0EC5813ACD87133A25767</ProjectFileChecksum>
       </Template>
       <Template dnOrder="17">
         <Name dnOrder="0">drv_spi_mapping.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
         <Checksum dnOrder="2">C10B515B3A6006C3E29B4837F46B356B</Checksum>
-        <ProjectFileChecksum dnOrder="3">6EB5F5573B02FD7F0100250DCF016066</ProjectFileChecksum>
       </Template>
       <Template dnOrder="18">
         <Name dnOrder="0">app.c</Name>
@@ -285,30 +268,26 @@
         <Name dnOrder="0">drv_spi_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/spi/static</Path>
         <Checksum dnOrder="2">029583174421016FE085183303C9FBB7</Checksum>
-        <ProjectFileChecksum dnOrder="3">2D05DF2D7DD08EC16077435A1C096A80</ProjectFileChecksum>
       </Template>
       <Template dnOrder="20">
         <Name dnOrder="0">drv_spi_static_ebm_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
         <Checksum dnOrder="2">F78220E4D25A7F066C100A881B8E9A73</Checksum>
-        <ProjectFileChecksum dnOrder="3">D1A202DC9B986D51C67FEADD367B8A57</ProjectFileChecksum>
       </Template>
       <Template dnOrder="21">
         <Name dnOrder="0">drv_usart_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/usart</Path>
         <Checksum dnOrder="2">5CECAF42B01CE886D52A8868E39E7772</Checksum>
-        <ProjectFileChecksum dnOrder="3">76C0F56EED37EB94F70945D2358B9167</ProjectFileChecksum>
       </Template>
       <Template dnOrder="22">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default</Path>
         <Checksum dnOrder="2">C2FDF6218CDD9CE0E51AFAC4ACBB5F79</Checksum>
-        <ProjectFileChecksum dnOrder="3">B0EE30398623A07C5CF2075D486D3669</ProjectFileChecksum>
       </Template>
       <Template dnOrder="23">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default</Path>
-        <Checksum dnOrder="2">E8113B5913D23C15C81BA3B21DCA9C9F</Checksum>
+        <Checksum dnOrder="2">3470A4E386D6750684A70E640C211363</Checksum>
         <ProjectFileChecksum dnOrder="3">4974ED6873ABE16370AA6A3164E1226A</ProjectFileChecksum>
       </Template>
       <Template dnOrder="24">
@@ -321,19 +300,16 @@
         <Name dnOrder="0">sys_devcon_pic32mk.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/system/devcon/src</Path>
         <Checksum dnOrder="2">60AF89730F54FE4D9C5A197A69DDD80B</Checksum>
-        <ProjectFileChecksum dnOrder="3">90781D24338F7A6F78C5CE2AAB109D6D</ProjectFileChecksum>
       </Template>
       <Template dnOrder="26">
         <Name dnOrder="0">drv_spi_static_sys_queue.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/default/framework/driver/spi/static/src</Path>
         <Checksum dnOrder="2">88DFCBFBAAE63FE43FB552C38461B445</Checksum>
-        <ProjectFileChecksum dnOrder="3">879194ECE6DCD6DDA69FDBBB69F65BF4</ProjectFileChecksum>
       </Template>
       <Template dnOrder="27">
         <Name dnOrder="0">drv_usart_static_local.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/default/framework/driver/usart/src</Path>
         <Checksum dnOrder="2">9563F23392942CF4B5C01E1065907D06</Checksum>
-        <ProjectFileChecksum dnOrder="3">9C231831FF80D3B5D3AB36F8D41564CB</ProjectFileChecksum>
       </Template>
     </Templates>
     <CompilerItems dnOrder="2">
