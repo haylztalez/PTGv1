@@ -59,6 +59,13 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_config.h"
 #include "system_definitions.h"
 
+typedef enum
+{
+    APP_SPI_STATE_START,
+    APP_SPI_STATE_WAIT,
+    APP_SPI_STATE_DONE
+} APP_SPI_STATES;
+
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -88,6 +95,7 @@ typedef enum
 {
 	/* Application's state machine's initial state. */
 	APP_STATE_INIT=0,
+    APP_STATE_INIT_PERIPHERALS,
 	APP_STATE_SERVICE_TASKS,
 
 	/* TODO: Define states used by the application state machine. */
@@ -114,15 +122,19 @@ typedef struct
     APP_STATES state;
 
     /* TODO: Define any additional data used by the application. */
-/*
-   USART Read/Write model variables used by the application:
-   
-    handleUSART0 : the USART driver handle returned by DRV_USART_Open
-    usartReadWriteTxIndex  :  The buffer index to USART data to be transmitted
-*/
-    DRV_HANDLE handleUSART0;
-    size_t     usartReadWriteTxIndex;
 
+    APP_SPI_STATES spiStateMachine;
+
+    /* SPI Driver Handle  */
+    DRV_HANDLE handleSPI0;
+
+    /* SPI Buffer Handle */
+    DRV_SPI_BUFFER_HANDLE drvSPIBufferHandle;
+    DRV_HANDLE handleUSART0;
+    DRV_HANDLE handleSPI1;
+	int tx_count;
+
+    DRV_HANDLE handleI2S;
 } APP_DATA;
 
 
@@ -205,6 +217,8 @@ void APP_Initialize ( void );
  */
 
 void APP_Tasks( void );
+
+void delay_ms(int n);
 
 
 #endif /* _APP_H */

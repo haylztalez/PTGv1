@@ -98,7 +98,7 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
     PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 0 );
 
     /* Enable Peripheral Bus 2 */
-    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 1, 1 );
+    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 1, 16 );
     PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 1 );
     /* Enable Peripheral Bus 3 */
     PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 2, 1 );
@@ -106,30 +106,46 @@ void SYS_CLK_Initialize( const SYS_CLK_INIT const * clkInit )
     /* Enable Peripheral Bus 4 */
     PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 3, 1 );
     PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 3 );
-    /* Enable Peripheral Bus 5 */
-    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 4, 1 );
-    PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 4 );
-    /* Enable Peripheral Bus 6 */
-    PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 5, 4 );
-    PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 5 );
+       /* Disable Peripheral Bus 5 */
+    PLIB_OSC_PBOutputClockDisable (OSC_ID_0, 4 );
+
+       /* Disable Peripheral Bus 6 */
+    PLIB_OSC_PBOutputClockDisable (OSC_ID_0, 5 );
+
     /* Enable Peripheral Bus 7 */
     PLIB_OSC_PBClockDivisorSet (OSC_ID_0, 6, 1 );
     PLIB_OSC_PBOutputClockEnable (OSC_ID_0, 6 );
   
  
 
-    /* Disable REFCLKO1*/
-    PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_1 );
+    /* Enable and configure REFCLKO1*/
+    
+    /* ROSEL Primary Oscillator POSC */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_1, 2 );
+    /* RODIV */
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_1, 1 );
+    /* ROTRIM */
+    PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_1, 0 );
+
+    PLIB_OSC_ReferenceOscEnable ( OSC_ID_0, OSC_REFERENCE_1 );
     /* Disable REFCLK1_OE*/
-    PLIB_OSC_ReferenceOutputDisable ( OSC_ID_0, OSC_REFERENCE_1 );
+    PLIB_OSC_ReferenceOutputEnable ( OSC_ID_0, OSC_REFERENCE_1 );
     /* Disable REFCLKO2*/
     PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_2 );
     /* Disable REFCLK2_OE*/
     PLIB_OSC_ReferenceOutputDisable ( OSC_ID_0, OSC_REFERENCE_2 );
-    /* Disable REFCLKO3*/
-    PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_3 );
+    /* Enable and configure REFCLKO3*/
+    
+    /* ROSEL System Clock SYSCLK */
+    PLIB_OSC_ReferenceOscBaseClockSelect ( OSC_ID_0, OSC_REFERENCE_3, 0 );
+    /* RODIV */
+    PLIB_OSC_ReferenceOscDivisorValueSet ( OSC_ID_0, OSC_REFERENCE_3, 4 );
+    /* ROTRIM */
+    PLIB_OSC_ReferenceOscTrimSet ( OSC_ID_0, OSC_REFERENCE_3, 0 );
+
+    PLIB_OSC_ReferenceOscEnable ( OSC_ID_0, OSC_REFERENCE_3 );
     /* Disable REFCLK3_OE*/
-    PLIB_OSC_ReferenceOutputDisable ( OSC_ID_0, OSC_REFERENCE_3 );
+    PLIB_OSC_ReferenceOutputEnable ( OSC_ID_0, OSC_REFERENCE_3 );
     /* Disable REFCLKO4*/
     PLIB_OSC_ReferenceOscDisable ( OSC_ID_0, OSC_REFERENCE_4 );
     /* Disable REFCLK4_OE*/
@@ -225,10 +241,8 @@ inline uint32_t SYS_CLK_PeripheralFrequencyGet ( CLK_BUSES_PERIPHERAL peripheral
                 freq = SYS_CLK_BUS_PERIPHERAL_4;
             break;
         case CLK_BUS_PERIPHERAL_5:
-                freq = SYS_CLK_BUS_PERIPHERAL_5;
             break;
         case CLK_BUS_PERIPHERAL_6:
-                freq = SYS_CLK_BUS_PERIPHERAL_6;
             break;
         case CLK_BUS_PERIPHERAL_7:
                 freq = SYS_CLK_BUS_PERIPHERAL_7;
@@ -281,10 +295,12 @@ inline uint32_t SYS_CLK_ReferenceFrequencyGet ( CLK_BUSES_REFERENCE referenceBus
     switch (referenceBus)
     {
         case CLK_BUS_REFERENCE_1:
+                freq = SYS_CLK_BUS_REFERENCE_1;
             break;
         case CLK_BUS_REFERENCE_2:
             break;
         case CLK_BUS_REFERENCE_3:
+                freq = SYS_CLK_BUS_REFERENCE_3;
             break;
         case CLK_BUS_REFERENCE_4:
             break;

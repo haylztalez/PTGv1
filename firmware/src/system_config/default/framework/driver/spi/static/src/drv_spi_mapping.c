@@ -1,14 +1,14 @@
 /*******************************************************************************
-  USART Driver Dynamic to Static mapping
+  SPI Driver Dynamic to Static mapping
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    drv_usart_mapping.c
+    drv_spi_mapping.c
 
   Summary:
-    Source code for the USART driver dynamic APIs to static API mapping.
+    Source code for the SPI driver dynamic APIs to static API mapping.
 
   Description:
     This file contains code that maps dynamic APIs to static whenever
@@ -55,15 +55,20 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system_definitions.h"
 
 
-SYS_MODULE_OBJ DRV_USART_Initialize(const SYS_MODULE_INDEX index,const SYS_MODULE_INIT * const init)
+SYS_MODULE_OBJ DRV_SPI_Initialize(const SYS_MODULE_INDEX index,const SYS_MODULE_INIT * const init)
 {
     SYS_MODULE_OBJ returnValue;
 
     switch(index)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_Initialize();
+            returnValue = DRV_SPI0_Initialize();
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_Initialize();
             break;
         }
         default:
@@ -75,13 +80,18 @@ SYS_MODULE_OBJ DRV_USART_Initialize(const SYS_MODULE_INDEX index,const SYS_MODUL
     return returnValue;
 }
 
-void DRV_USART_Deinitialize( SYS_MODULE_OBJ object)
+void DRV_SPI_Deinitialize( SYS_MODULE_OBJ object)
 {
     switch(object)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            DRV_USART0_Deinitialize();
+            DRV_SPI0_Deinitialize();
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            DRV_SPI1_Deinitialize();
             break;
         }
         default:
@@ -91,15 +101,20 @@ void DRV_USART_Deinitialize( SYS_MODULE_OBJ object)
     }
 }
 
-SYS_STATUS DRV_USART_Status( SYS_MODULE_OBJ object)
+SYS_STATUS DRV_SPI_Status( SYS_MODULE_OBJ object)
 {
     SYS_STATUS returnValue;
 
     switch(object)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_Status();
+            returnValue = DRV_SPI0_Status();
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_Status();
             break;
         }
         default:
@@ -111,45 +126,18 @@ SYS_STATUS DRV_USART_Status( SYS_MODULE_OBJ object)
     return returnValue;
 }
 
-void DRV_USART_TasksTransmit ( SYS_MODULE_OBJ object )
+void DRV_SPI_Tasks ( SYS_MODULE_OBJ object )
 {
     switch(object)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            DRV_USART0_TasksTransmit();
+            DRV_SPI0_Tasks();
             break;
         }
-        default:
+        case DRV_SPI_INDEX_1:
         {
-            break;
-        }
-    }
-}
-
-void DRV_USART_TasksReceive ( SYS_MODULE_OBJ object )
-{
-    switch(object)
-    {
-        case DRV_USART_INDEX_0:
-        {
-            DRV_USART0_TasksReceive();
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
-}
-
-void DRV_USART_TasksError ( SYS_MODULE_OBJ object )
-{
-    switch(object)
-    {
-        case DRV_USART_INDEX_0:
-        {
-            DRV_USART0_TasksError();
+            DRV_SPI1_Tasks();
             break;
         }
         default:
@@ -161,15 +149,20 @@ void DRV_USART_TasksError ( SYS_MODULE_OBJ object )
 
 
 //client interface
-DRV_HANDLE DRV_USART_Open( const SYS_MODULE_INDEX index, const DRV_IO_INTENT ioIntent)
+DRV_HANDLE DRV_SPI_Open( const SYS_MODULE_INDEX index, const DRV_IO_INTENT ioIntent)
 {
     DRV_HANDLE returnValue;
 
     switch(index)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_Open(index,ioIntent);
+            returnValue = DRV_SPI0_Open(index,ioIntent);
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_Open(index,ioIntent);
             break;
         }
         default:
@@ -181,7 +174,7 @@ DRV_HANDLE DRV_USART_Open( const SYS_MODULE_INDEX index, const DRV_IO_INTENT ioI
     return returnValue;
 }
 
-void DRV_USART_Close( const DRV_HANDLE handle)
+void DRV_SPI_Close( const DRV_HANDLE handle)
 {
     uintptr_t instance;
 
@@ -189,9 +182,14 @@ void DRV_USART_Close( const DRV_HANDLE handle)
     //As we are handling single client, only multiple instance is taken care.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            DRV_USART0_Close();
+            DRV_SPI0_Close( );
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            DRV_SPI1_Close( );
             break;
         }
         default:
@@ -201,69 +199,28 @@ void DRV_USART_Close( const DRV_HANDLE handle)
     }
 }
 
-DRV_USART_CLIENT_STATUS DRV_USART_ClientStatus ( DRV_HANDLE handle )
+int32_t DRV_SPI_ClientConfigure ( DRV_HANDLE handle, const DRV_SPI_CLIENT_DATA * cfgData  )
 {
     uintptr_t instance;
-    DRV_USART_CLIENT_STATUS returnValue;
+    int32_t returnValue;
 
     instance = handle & 0x00FF;
     //As we are handling single client, only multiple instance is taken care.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_ClientStatus();
+            returnValue = DRV_SPI0_ClientConfigure( cfgData );
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_ClientConfigure( cfgData );
             break;
         }
         default:
         {
-            returnValue = DRV_CLIENT_STATUS_ERROR;
-            break;
-        }
-    }
-    return returnValue;
-}
-
-DRV_USART_TRANSFER_STATUS DRV_USART_TransferStatus( const DRV_HANDLE handle )
-{
-    uintptr_t instance;
-    DRV_USART_TRANSFER_STATUS returnValue;
-
-    instance = handle & 0x00FF;
-    //As we are handling single client, only multiple instance is taken care.
-    switch(instance)
-    {
-        case DRV_USART_INDEX_0:
-        {
-            returnValue = DRV_USART0_TransferStatus();
-            break;
-        }
-        default:
-        {
-            returnValue = (DRV_USART_TRANSFER_STATUS)NULL;
-            break;
-        }
-    }
-    return returnValue;
-}
-
-DRV_USART_ERROR DRV_USART_ErrorGet(const DRV_HANDLE handle)
-{
-    uintptr_t instance;
-    DRV_USART_ERROR returnValue;
-
-    instance = handle & 0x00FF;
-    //As we are handling single client, only multiple instance is taken care.
-    switch(instance)
-    {
-        case DRV_USART_INDEX_0:
-        {
-            returnValue = DRV_USART0_ErrorGet();
-            break;
-        }
-        default:
-        {
-            returnValue = (DRV_USART_ERROR)NULL;
+            returnValue = (int32_t)DRV_HANDLE_INVALID;
             break;
         }
     }
@@ -271,190 +228,183 @@ DRV_USART_ERROR DRV_USART_ErrorGet(const DRV_HANDLE handle)
 }
 
 
+//Read & Write Client Interface
 
-//Byte Model
-uint8_t DRV_USART_ReadByte( const DRV_HANDLE handle )
+DRV_SPI_BUFFER_HANDLE DRV_SPI_BufferAddRead ( DRV_HANDLE handle,void *rxBuffer,size_t size,DRV_SPI_BUFFER_EVENT_HANDLER completeCB,void * context)
 {
     uintptr_t instance;
-    uint8_t returnValue;
+    DRV_SPI_BUFFER_HANDLE returnValue;
 
     instance = handle & 0x00FF;
     //As we are handling single client, only multiple instance is taken care.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_ReadByte();
+            returnValue = DRV_SPI0_BufferAddRead ( rxBuffer, size, completeCB, context);
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_BufferAddRead ( rxBuffer, size, completeCB, context);
             break;
         }
         default:
         {
-            SYS_ASSERT(false, "Incorrect Driver Handle");
-            returnValue = 0;
+            returnValue = DRV_SPI_BUFFER_HANDLE_INVALID;
             break;
         }
     }
     return returnValue;
 }
 
-void DRV_USART_WriteByte( const DRV_HANDLE handle, const uint8_t byte)
+DRV_SPI_BUFFER_HANDLE DRV_SPI_BufferAddWrite ( DRV_HANDLE handle,void *txBuffer,size_t size,DRV_SPI_BUFFER_EVENT_HANDLER completeCB,void * context)
 {
     uintptr_t instance;
+    DRV_SPI_BUFFER_HANDLE returnValue;
 
     instance = handle & 0x00FF;
     //As we are handling single client, only multiple instance is taken care.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            DRV_USART0_WriteByte(byte);
+            returnValue = DRV_SPI0_BufferAddWrite ( txBuffer, size, completeCB, context);
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_BufferAddWrite ( txBuffer, size, completeCB, context);
             break;
         }
         default:
         {
-            break;
-        }
-    }
-}
-
-unsigned int DRV_USART_ReceiverBufferSizeGet( const DRV_HANDLE handle )
-{
-    uintptr_t instance;
-    unsigned int returnValue;
-
-    instance = handle & 0x00FF;
-    //As we are handling single client, only multiple instance is taken care.
-    switch(instance)
-    {
-        case DRV_USART_INDEX_0:
-        {
-            returnValue = DRV_USART0_ReceiverBufferSizeGet();
-            break;
-        }
-        default:
-        {
-            returnValue = (unsigned int)NULL;
+            returnValue = DRV_SPI_BUFFER_HANDLE_INVALID;
             break;
         }
     }
     return returnValue;
 }
 
-unsigned int DRV_USART_TransmitBufferSizeGet( const DRV_HANDLE handle )
+DRV_SPI_BUFFER_HANDLE DRV_SPI_BufferAddWriteRead ( DRV_HANDLE handle, void *txBuffer, size_t txSize,
+    void *rxBuffer, size_t rxSize, DRV_SPI_BUFFER_EVENT_HANDLER completeCB, void * context )
 {
     uintptr_t instance;
-    unsigned int returnValue;
+    DRV_SPI_BUFFER_HANDLE returnValue;
 
     instance = handle & 0x00FF;
     //As we are handling single client, only multiple instance is taken care.
+    //Mapping to a new static driver's API name.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_TransmitBufferSizeGet();
+            returnValue = DRV_SPI0_BufferAddWriteRead ( txBuffer, rxBuffer, txSize );
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_BufferAddWriteRead ( txBuffer, rxBuffer, txSize );
             break;
         }
         default:
         {
-            returnValue = (unsigned int)NULL;
+            returnValue = DRV_SPI_BUFFER_HANDLE_INVALID;
             break;
         }
     }
     return returnValue;
 }
 
-bool DRV_USART_ReceiverBufferIsEmpty( const DRV_HANDLE handle )
+DRV_SPI_BUFFER_HANDLE DRV_SPI_BufferAddRead2 ( DRV_HANDLE handle,void *rxBuffer,size_t size,DRV_SPI_BUFFER_EVENT_HANDLER completeCB,void * context, DRV_SPI_BUFFER_HANDLE * jobHandle)
 {
     uintptr_t instance;
-    bool returnValue;
+    DRV_SPI_BUFFER_HANDLE returnValue;
 
     instance = handle & 0x00FF;
     //As we are handling single client, only multiple instance is taken care.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_ReceiverBufferIsEmpty();
+            returnValue = DRV_SPI0_BufferAddRead2 ( rxBuffer, size, completeCB, context, jobHandle);
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_BufferAddRead2 ( rxBuffer, size, completeCB, context, jobHandle);
             break;
         }
         default:
         {
-            returnValue = false;
+            returnValue = DRV_SPI_BUFFER_HANDLE_INVALID;
             break;
         }
     }
     return returnValue;
 }
 
-bool DRV_USART_TransmitBufferIsFull( const DRV_HANDLE handle )
+DRV_SPI_BUFFER_HANDLE DRV_SPI_BufferAddWrite2 ( DRV_HANDLE handle,void *txBuffer,size_t size,DRV_SPI_BUFFER_EVENT_HANDLER completeCB,void * context, DRV_SPI_BUFFER_HANDLE * jobHandle)
 {
     uintptr_t instance;
-    bool returnValue;
+    DRV_SPI_BUFFER_HANDLE returnValue;
 
     instance = handle & 0x00FF;
     //As we are handling single client, only multiple instance is taken care.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_TransmitBufferIsFull();
+            returnValue = DRV_SPI0_BufferAddWrite2 ( txBuffer, size, completeCB, context, jobHandle);
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_BufferAddWrite2 ( txBuffer, size, completeCB, context, jobHandle);
             break;
         }
         default:
         {
-            returnValue = false;
+            returnValue = DRV_SPI_BUFFER_HANDLE_INVALID;
             break;
         }
     }
     return returnValue;
 }
 
-DRV_USART_BAUD_SET_RESULT DRV_USART_BaudSet(const DRV_HANDLE handle, uint32_t baud)
+DRV_SPI_BUFFER_HANDLE DRV_SPI_BufferAddWriteRead2 ( DRV_HANDLE handle, void *txBuffer, size_t txSize,void *rxBuffer, size_t rxSize,DRV_SPI_BUFFER_EVENT_HANDLER completeCB,void * context, DRV_SPI_BUFFER_HANDLE * jobHandle)
 {
     uintptr_t instance;
-    DRV_USART_BAUD_SET_RESULT returnValue;
+    DRV_SPI_BUFFER_HANDLE returnValue;
 
     instance = handle & 0x00FF;
     //As we are handling single client, only multiple instance is taken care.
     switch(instance)
     {
-        case DRV_USART_INDEX_0:
+        case DRV_SPI_INDEX_0:
         {
-            returnValue = DRV_USART0_BaudSet(baud);
+            returnValue = DRV_SPI0_BufferAddWriteRead2 ( txBuffer, txSize, rxBuffer, rxSize, completeCB, context, jobHandle);
+            break;
+        }
+        case DRV_SPI_INDEX_1:
+        {
+            returnValue = DRV_SPI1_BufferAddWriteRead2 ( txBuffer, txSize, rxBuffer, rxSize, completeCB, context, jobHandle );
             break;
         }
         default:
         {
-            returnValue = DRV_USART_BAUD_SET_ERROR;
+            returnValue = DRV_SPI_BUFFER_HANDLE_INVALID;
             break;
         }
     }
     return returnValue;
 }
 
-DRV_USART_LINE_CONTROL_SET_RESULT DRV_USART_LineControlSet(const DRV_HANDLE handle,const DRV_USART_LINE_CONTROL lineControl)
+DRV_SPI_BUFFER_EVENT DRV_SPI_BufferStatus ( DRV_SPI_BUFFER_HANDLE bufferHandle )
 {
-    uintptr_t instance;
-    DRV_USART_LINE_CONTROL_SET_RESULT returnValue;
-
-    instance = handle & 0x00FF;
-    //As we are handling single client, only multiple instance is taken care.
-    switch(instance)
-    {
-        case DRV_USART_INDEX_0:
-        {
-            returnValue = DRV_USART0_LineControlSet(lineControl);
-            break;
-        }
-        default:
-        {
-            returnValue = DRV_USART_LINE_CONTROL_SET_ERROR;
-            break;
-        }
-    }
-    return returnValue;
+    //This function is independent of instance or client.
+    return DRV_SPI0_BufferStatus ( bufferHandle);
 }
-
 
 /*******************************************************************************
  End of File
